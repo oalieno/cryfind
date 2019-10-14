@@ -114,6 +114,12 @@ class Search:
         return results
 
     def print_results(self, results):
+        '''
+        Parameters
+        ----------
+        results : Dict[str, List[Result]]
+            a dictionary with algorithm name as key, list of Result instances as value.
+        '''
         print()
         if results:
             for algo, constants in results.items():
