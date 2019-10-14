@@ -110,7 +110,7 @@ class Search:
             for value in dll.imports:
                 for names in [*whitelist.values()]:
                     if value.name in names:
-                        results[value.name].append(Result(description = dllname))
+                        results[value.name.decode()].append(Result(description = dllname.decode()))
         return results
 
     def print_results(self, results):
@@ -118,13 +118,11 @@ class Search:
         if results:
             for algo, constants in results.items():
                 print(f'[+] {algo}')
-                addresses = []
-                for constant in sorted(constants, key = lambda x: x.address):
-                    if constant.address >= 0 and constant.address not in addresses:
+                for constant in constants:
+                    if constant.address >= 0:
                         print(f'      Address: 0x{constant.address:x}')
                     if constant.description:
                         print(f'      ↳ Description: {constant.description}')
-                    addresses.append(constant.address)
 
         else:
             print('[-] I found nothing')
