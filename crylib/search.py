@@ -130,12 +130,14 @@ class Search:
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         stackstrings = b''.join(re.findall(b'\xc6\x45.(.)', self.binary))
+        indexes = [m.start() for m in re.finditer(b'\xc6\x45.(.)', self.binary)]
         results = defaultdict(list)
         for db in dbs:
             for algo, constants in db.constants.items():
                 for constant in constants:
                     result = self.search_constant(stackstrings, constant)
                     if result:
+                        result.address = indexes[result.address]
                         results[algo].append(result)
         return results
 
