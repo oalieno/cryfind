@@ -1,3 +1,4 @@
+import re
 import yara
 import pefile
 import pathlib
@@ -15,16 +16,17 @@ class Search:
             the binary file need to analyze
         '''
         self.filename = filename
-        self.bytes = self._load_bytes(filename)
+        self.binary = self._load_binary(filename)
         self.pe = self._load_pe(filename)
 
         self.methods = [
             ('Default CryFind DB', 'using literally string compare', self.search_constants),
             ('Yara-Rules Crypto Signatures', 'using yara rules in rules/ folder', self.search_yara),
-            ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports)
+            ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports),
+            ('Stackstrings', 'search for string made in runtime through pattern matching mov [rbp+??], ??', self.search_stackstrings)
         ]
 
-    def _load_bytes(self, filename):
+    def _load_binary(self, filename):
         with open(filename, 'rb') as f:
             return f.read()
 
@@ -34,25 +36,30 @@ class Search:
         except pefile.PEFormatError:
             return None
 
-    def search_constant(self, constant):
+    @staticmethod
+    def search_constant(binary, constant):
         '''
         find one constant.
 
         Parameters
         ----------
+        binary : bytes
+            the target binary to search for
         constant : Constant
             the constant instance to search for
 
         Returns
         -------
-        List[int]
-            addresses of constant found in the binary
+        Result
+            Result instance of constant found in the binary. None if not found.
         '''
         addresses = []
         for value in constant.values:
-            if value in self.bytes:
-                addresses.append(self.bytes.find(value))
-        return addresses
+            if value in binary:
+                addresses.append(binary.find(value))
+        if len(addresses) == len(constant.values):
+            return Result(address = min(addresses), description = constant.description)
+        return None
 
     def search_constants(self):
         '''
@@ -67,9 +74,9 @@ class Search:
         for db in dbs:
             for algo, constants in db.constants.items():
                 for constant in constants:
-                    addresses = self.search_constant(constant)
-                    if len(addresses) == len(constant.values):
-                        results[algo].append(Result(address = min(addresses), description = constant.description))
+                    result = self.search_constant(self.binary, constant)
+                    if result:
+                        results[algo].append(result)
         return results
 
     def search_yara(self):
@@ -86,7 +93,7 @@ class Search:
         for filename in p.glob('rules/*'):
             with open(filename) as f:
                 y = yara.compile(source = f.read())
-            matches = y.match(data = self.bytes)
+            matches = y.match(data = self.binary)
             for match in matches:
                 algo, address = match.rule, match.strings[0][0]
                 results[algo].append(Result(address = address))
@@ -102,7 +109,7 @@ class Search:
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         if not self.pe:
-            return {}, False
+            return {}
 
         results = defaultdict(list)
         for dll in self.pe.DIRECTORY_ENTRY_IMPORT:
@@ -111,6 +118,25 @@ class Search:
                 for names in [*whitelist.values()]:
                     if value.name in names:
                         results[value.name.decode()].append(Result(description = dllname.decode()))
+        return results
+
+    def search_stackstrings(self):
+        '''
+        search for string made in runtime through pattern matching mov [rbp+??], ??
+
+        Returns
+        -------
+        Dict[str, List[Result]]
+            a dictionary with algorithm name as key, list of Result instances as value.
+        '''
+        stackstrings = b''.join(re.findall(b'\xc6\x45.(.)', self.binary))
+        results = defaultdict(list)
+        for db in dbs:
+            for algo, constants in db.constants.items():
+                for constant in constants:
+                    result = self.search_constant(stackstrings, constant)
+                    if result:
+                        results[algo].append(result)
         return results
 
     def print_results(self, results):
