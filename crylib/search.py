@@ -1,4 +1,4 @@
-import re
+import os
 import yara
 import pefile
 import pathlib
@@ -20,10 +20,14 @@ class Search:
         self.pe = self._load_pe(filename)
 
         self.methods = [
-            ('Default CryFind DB', 'using literally string compare', self.search_constants),
-            ('Yara-Rules Crypto Signatures', 'using yara rules in rules/ folder', self.search_yara),
-            ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports),
-            ('Stackstrings', 'search for string made in runtime through pattern matching mov [rbp+??], ??', self.search_stackstrings)
+            [
+                ('Default CryFind DB', 'using literally string compare', self.search_constants),
+                ('Yara-Rules Crypto Signatures', 'using yara rules in rules/ folder', self.search_yara),
+                ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports)
+            ],
+            [
+                ('Stackstrings', 'search for string made in runtime through pattern matching mov [rbp+??], ??', self.search_stackstrings)
+            ]
         ]
 
     def _load_binary(self, filename):
@@ -129,8 +133,16 @@ class Search:
         Dict[int, List[Result]]
             a dictionary with address as key, list of Result instances as value.
         '''
-        stackstrings = b''.join(re.findall(b'\xc6\x45.(.)', self.binary))
-        indexes = [m.start() for m in re.finditer(b'\xc6\x45.(.)', self.binary)]
+        os.system(f'ida64 -A -S"ironstrings.py" -c {self.filename}') # command injection?
+        with open('/tmp/stackstring-output', 'rb') as f:
+            lines = f.readlines()
+        stackstrings = b''
+        indexes = []
+        for line in lines:
+            address = int(line.split(b' ')[0])
+            string = line.strip().partition(b': ')[2][1:-1]
+            stackstrings += string
+            indexes += [address] * len(string)
         results = defaultdict(list)
         for db in dbs:
             for algo, constants in db.constants.items():
@@ -179,14 +191,15 @@ class Search:
             print('[-] I found nothing')
         print()
 
-    def run(self):
+    def run(self, level = 1):
         '''
         run all search method and print the result summary
         '''
-        for name, description, method in self.methods:
-            print('=' * 30)
-            print(f'{name}')
-            print(f'↳ {description}')
-            print('=' * 30)
-            results = method()
-            self.print_results(results)
+        for methods in self.methods[:level]:
+            for name, description, method in methods:
+                print('=' * 30)
+                print(f'{name}')
+                print(f'↳ {description}')
+                print('=' * 30)
+                results = method()
+                self.print_results(results)
