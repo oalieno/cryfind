@@ -1,6 +1,7 @@
 from .CryFind import cryFindDB
 from .CryptoAPI import cryptoAPIDB
 from .KryptoAnalyzer import kryptoAnalyzerDB
+from .Polichombr import PolichombrDB
 
 def print_stats(dbs):
     print(f'''
@@ -21,4 +22,4 @@ def count_constants(dbs):
             ans += len(constants)
     return ans
 
-dbs = [cryFindDB, cryptoAPIDB, kryptoAnalyzerDB]
+dbs = [cryFindDB, cryptoAPIDB, kryptoAnalyzerDB, PolichombrDB]
