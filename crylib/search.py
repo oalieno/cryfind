@@ -68,7 +68,7 @@ class Search:
         Returns
         -------
         Dict[int, List[Result]]
-            a dictionary with algorithm name as key, list of Result instances as value.
+            a dictionary with address as key, list of Result instances as value.
         '''
         results = defaultdict(list)
         for db in dbs:
@@ -86,7 +86,7 @@ class Search:
         Returns
         -------
         Dict[int, List[Result]]
-            a dictionary with algorithm name as key, list of Result instances as value.
+            a dictionary with address as key, list of Result instances as value.
         '''
         results = defaultdict(list)
         p = pathlib.Path(__file__).parent.parent
@@ -106,7 +106,7 @@ class Search:
         Returns
         -------
         Dict[int, List[Result]]
-            a dictionary with algorithm name as key, list of Result instances as value.
+            a dictionary with address as key, list of Result instances as value.
         '''
         if not self.pe:
             return {}
@@ -127,7 +127,7 @@ class Search:
         Returns
         -------
         Dict[int, List[Result]]
-            a dictionary with algorithm name as key, list of Result instances as value.
+            a dictionary with address as key, list of Result instances as value.
         '''
         stackstrings = b''.join(re.findall(b'\xc6\x45.(.)', self.binary))
         indexes = [m.start() for m in re.finditer(b'\xc6\x45.(.)', self.binary)]
@@ -146,7 +146,7 @@ class Search:
         Parameters
         ----------
         results : Dict[int, List[Result]]
-            a dictionary with algorithm name as key, list of Result instances as value.
+            a dictionary with address as key, list of Result instances as value.
         '''
         print()
         if results_map:
