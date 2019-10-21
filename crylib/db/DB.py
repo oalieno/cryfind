@@ -10,4 +10,4 @@ class DB:
             algo = item['algo']
             values = item['constant']['values']
             description = item['constant']['description']
-            self.constants[algo].append(Constant(values = values, description = description))
+            self.constants[algo].append(Constant(algorithm = algo, values = values, description = description))

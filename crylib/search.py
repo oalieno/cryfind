@@ -3,7 +3,7 @@ import yara
 import pefile
 import pathlib
 from collections import defaultdict
-from crylib import Result
+from crylib import Constant, Result
 from crylib.db import dbs
 from crylib.db.CryptoAPI import whitelist
 
@@ -58,7 +58,7 @@ class Search:
             if value in binary:
                 addresses.append(binary.find(value))
         if len(addresses) == len(constant.values):
-            return Result(address = min(addresses), description = constant.description)
+            return Result(constant = constant, address = min(addresses))
         return None
 
     def search_constants(self):
@@ -67,7 +67,7 @@ class Search:
 
         Returns
         -------
-        Dict[str, List[Result]]
+        Dict[int, List[Result]]
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         results = defaultdict(list)
@@ -76,7 +76,7 @@ class Search:
                 for constant in constants:
                     result = self.search_constant(self.binary, constant)
                     if result:
-                        results[algo].append(result)
+                        results[result.address].append(result)
         return results
 
     def search_yara(self):
@@ -85,7 +85,7 @@ class Search:
 
         Returns
         -------
-        Dict[str, List[Result]]
+        Dict[int, List[Result]]
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         results = defaultdict(list)
@@ -96,7 +96,7 @@ class Search:
             matches = y.match(data = self.binary)
             for match in matches:
                 algo, address = match.rule, match.strings[0][0]
-                results[algo].append(Result(address = address))
+                results[address].append(Result(address = address, constant = Constant(algorithm = algo)))
         return results
 
     def search_pe_imports(self):
@@ -105,7 +105,7 @@ class Search:
 
         Returns
         -------
-        Dict[str, List[Result]]
+        Dict[int, List[Result]]
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         if not self.pe:
@@ -117,7 +117,7 @@ class Search:
             for value in dll.imports:
                 for names in [*whitelist.values()]:
                     if value.name in names:
-                        results[value.name.decode()].append(Result(description = dllname.decode()))
+                        results[-1].append(Result(constant = Constant(description = f'{value.name.decode()} ({dllname.decode()})')))
         return results
 
     def search_stackstrings(self):
@@ -126,7 +126,7 @@ class Search:
 
         Returns
         -------
-        Dict[str, List[Result]]
+        Dict[int, List[Result]]
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         stackstrings = b''.join(re.findall(b'\xc6\x45.(.)', self.binary))
@@ -138,25 +138,42 @@ class Search:
                     result = self.search_constant(stackstrings, constant)
                     if result:
                         result.address = indexes[result.address]
-                        results[algo].append(result)
+                        results[result.address].append(result)
         return results
 
-    def print_results(self, results):
+    def print_results(self, results_map):
         '''
         Parameters
         ----------
-        results : Dict[str, List[Result]]
+        results : Dict[int, List[Result]]
             a dictionary with algorithm name as key, list of Result instances as value.
         '''
         print()
-        if results:
-            for algo, constants in results.items():
-                print(f'[+] {algo}')
-                for constant in constants:
-                    if constant.address >= 0:
-                        print(f'      Address: 0x{constant.address:x}')
-                    if constant.description:
-                        print(f'      ↳ Description: {constant.description}')
+        if results_map:
+            for address, results in sorted(results_map.items()):
+                if address >= 0:
+                    print(f'[+] 0x{address:x}')
+                    for i, result in enumerate(results):
+                        constant = result.constant
+                        text = '    '
+                        if len(results) == 1:
+                            text += '  '
+                        elif i == 0:
+                            text += '┌ '
+                        elif i == len(results) - 1:
+                            text += '└ '
+                        else:
+                            text += '│ '
+                        if constant.algorithm:
+                            text += constant.algorithm
+                        if constant.algorithm and constant.description:
+                            text += ' - '
+                        if constant.description:
+                            text += constant.description
+                        print(text)
+                else:
+                    for result in results:
+                        print(result.constant.description)
 
         else:
             print('[-] I found nothing')
