@@ -136,7 +136,7 @@ I use the following methods to search crypto signatures
 
 1. Literally string compare, including **crypto costants** and **crypto api name**
 2. yara rules
-3. **(windows only)** search **crypto api** name in pe import table 
+3. **(PE executable only)** search **crypto api** name in pe import table 
 4. Use [Flare-ida ironstrings](https://www.fireeye.com/blog/threat-research/2019/02/recovering-stackstrings-using-emulation-with-ironstrings.html) to search in stackstrings
 
 ## Database Resource
