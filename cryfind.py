@@ -22,11 +22,11 @@ def banner():
 ''')
 
 def main():
-    banner()
-
     arguments = docopt(__doc__)
     filename = arguments['<filename>']
     level = int(arguments['--level'])
+
+    banner()
 
     search = Search(filename)
     search.run(level = level)
