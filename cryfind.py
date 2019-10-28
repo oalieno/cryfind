@@ -5,11 +5,11 @@ from crylib.search import Search
 
 __doc__ = f"""
 Usage:
-{sys.argv[0]} [-l VALUE] <filename>
+{sys.argv[0]} [-s] <filename>
 
 Options:
--h --help                Show this screen
--l VALUE --level VALUE   Specify search level, can be 1 or 2 [default: 1]
+-h --help           Show this screen
+-s --stackstrings   Enable stackstrings search, which use ida script [default: False]
 """
 
 def banner():
@@ -24,12 +24,12 @@ def banner():
 def main():
     arguments = docopt(__doc__)
     filename = arguments['<filename>']
-    level = int(arguments['--level'])
+    stackstrings = arguments['--stackstrings']
 
     banner()
 
     search = Search(filename)
-    search.run(level = level)
+    search.run(stackstrings = stackstrings)
 
 if __name__ == '__main__':
     try:

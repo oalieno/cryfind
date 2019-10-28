@@ -20,14 +20,10 @@ class Search:
         self.pe = self._load_pe(filename)
 
         self.methods = [
-            [
-                ('Default CryFind DB', 'using literally string compare', self.search_constants),
-                ('Yara-Rules Crypto Signatures', 'using yara rules in rules/ folder', self.search_yara),
-                ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports)
-            ],
-            [
-                ('Stackstrings', 'search for string made in runtime through pattern matching mov [rbp+??], ??', self.search_stackstrings)
-            ]
+            ('Default CryFind DB', 'using literally string compare', self.search_constants),
+            ('Yara-Rules Crypto Signatures', 'using yara rules in rules/ folder', self.search_yara),
+            ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports),
+            ('Stackstrings', 'search for string made in runtime through pattern matching mov [rbp+??], ??', self.search_stackstrings)
         ]
 
     def _load_binary(self, filename):
@@ -144,11 +140,11 @@ class Search:
             indexes += [address] * len(string)
         results = defaultdict(list)
         for db in dbs:
-            for algo, constants in db.constants.items():
-                for constant in constants:
-                    result = self.search_constant(stackstrings, constant)
-                    if result:
-                        result.address = indexes[result.address]
+            for constant in db.constants:
+                result = self.search_constant(stackstrings, constant)
+                if result:
+                    result.address = indexes[result.address]
+                    if str(result.constant) not in [str(r.constant) for r in results[result.address]]:
                         results[result.address].append(result)
         return results
 
@@ -185,15 +181,16 @@ class Search:
             print('[-] I found nothing')
         print()
 
-    def run(self, level = 1):
+    def run(self, stackstrings = False):
         '''
         run all search method and print the result summary
         '''
-        for methods in self.methods[:level]:
-            for name, description, method in methods:
-                print('=' * 30)
-                print(f'{name}')
-                print(f'↳ {description}')
-                print('=' * 30)
-                results = method()
-                self.print_results(results)
+        for name, description, method in self.methods:
+            if name == 'Stackstrings' and not stackstrings:
+                continue
+            print('=' * 30)
+            print(f'{name}')
+            print(f'↳ {description}')
+            print('=' * 30)
+            results = method()
+            self.print_results(results)
