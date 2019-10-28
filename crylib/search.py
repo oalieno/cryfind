@@ -76,11 +76,10 @@ class Search:
         '''
         results = defaultdict(list)
         for db in dbs:
-            for algo, constants in db.constants.items():
-                for constant in constants:
-                    result = self.search_constant(self.binary, constant)
-                    if result:
-                        results[result.address].append(result)
+            for constant in db.constants:
+                result = self.search_constant(self.binary, constant)
+                if result and str(result.constant) not in [str(r.constant) for r in results[result.address]]:
+                    results[result.address].append(result)
         return results
 
     def search_yara(self):
@@ -176,12 +175,7 @@ class Search:
                             text += '└ '
                         else:
                             text += '│ '
-                        if constant.algorithm:
-                            text += constant.algorithm
-                        if constant.algorithm and constant.description:
-                            text += ' - '
-                        if constant.description:
-                            text += constant.description
+                        text += str(constant)
                         print(text)
                 else:
                     for result in results:
