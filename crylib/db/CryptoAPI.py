@@ -21,7 +21,7 @@ for filename in p.glob('dlls/*'):
             continue
         if symbol.name in whitelist.get(filename.name, []):
             data.append({
-                'algo': 'Crypto API',
+                'algorithm': 'Crypto API',
                 'constant': {
                     'description': f'{symbol.name.decode()} ({filename.name})',
                     'values': [symbol.name]

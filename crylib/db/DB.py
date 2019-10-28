@@ -4,10 +4,10 @@ from .. import Constant
 class DB:
     def __init__(self, description):
         self.description = description
-        self.constants = defaultdict(list)
+        self.constants = []
     def load(self, data):
         for item in data:
-            algo = item['algo']
+            algorithm = item['algorithm']
             values = item['constant']['values']
             description = item['constant']['description']
-            self.constants[algo].append(Constant(algorithm = algo, values = values, description = description))
+            self.constants.append(Constant(algorithm = algorithm,values = values, description = description))
