@@ -190,7 +190,7 @@ class Search:
                 continue
 
             print('=' * 30)
-            print(f'{name}')
+            print(name)
             print(f'↳ {description}')
             print('=' * 30)
             results = method()
