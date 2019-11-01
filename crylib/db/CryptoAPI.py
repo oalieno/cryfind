@@ -12,21 +12,15 @@ whitelist = {
 
 data = []
 
-p = pathlib.Path(__file__).parent.parent.parent
-for filename in p.glob('dlls/*'):
-    pe = pefile.PE(filename)
-
-    for symbol in pe.DIRECTORY_ENTRY_EXPORT.symbols:
-        if not symbol.name:
-            continue
-        if symbol.name in whitelist.get(filename.name, []):
-            data.append({
-                'algorithm': 'Crypto API',
-                'constant': {
-                    'description': f'{symbol.name.decode()} ({filename.name})',
-                    'values': [symbol.name]
-                }
-            })
+for dllname, functions in whitelist.items():
+    for function in functions:
+        data.append({
+            'algorithm': 'Crypto API',
+            'constant': {
+                'description': f'{function.decode("ascii")} ({dllname})',
+                'values': [function]
+            }
+        })
 
 cryptoAPIDB = DB({
     'title': 'Crypto API Names',
