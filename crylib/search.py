@@ -181,13 +181,14 @@ class Search:
             print('[-] I found nothing')
         print()
 
-    def run(self, stackstrings = False):
+    def run(self, exclude_methods=[]):
         '''
         run all search method and print the result summary
         '''
         for name, description, method in self.methods:
-            if name == 'Stackstrings' and not stackstrings:
+            if name in exclude_methods:
                 continue
+
             print('=' * 30)
             print(f'{name}')
             print(f'↳ {description}')

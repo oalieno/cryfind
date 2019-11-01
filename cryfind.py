@@ -26,10 +26,14 @@ def main():
     filename = arguments['<filename>']
     stackstrings = arguments['--stackstrings']
 
+    exclude_methods = ['Stackstrings']
+    if stackstrings:
+        exclude_methods.remove('Stackstrings')
+
     banner()
 
     search = Search(filename)
-    search.run(stackstrings = stackstrings)
+    search.run(exclude_methods)
 
 if __name__ == '__main__':
     try:
