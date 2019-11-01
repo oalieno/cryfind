@@ -7,6 +7,22 @@ from crylib import Constant, Result
 from crylib.db import dbs
 from crylib.db.CryptoAPI import whitelist
 
+def _simple_valid_pefile(blob):
+    '''
+    Parameters
+    ----------
+    blob : bytes
+        binary blob to be checked
+    '''
+    if blob[:2] != b'MZ' or len(blob) < 0x40:
+        return False
+
+    offset = int.from_bytes(blob[0x3c:0x3c+4], 'little')
+    if offset + 4 > len(blob):
+        return False
+
+    return blob[offset:offset+4] == b'PE\0\0'
+
 class Search:
     def __init__(self, filename):
         '''
@@ -17,7 +33,9 @@ class Search:
         '''
         self.filename = filename
         self.binary = self._load_binary(filename)
-        self.pe = self._load_pe(filename)
+        self.pe = None
+        if _simple_valid_pefile(self.binary):
+            self.pe = self._load_pe(filename)
 
         self.methods = [
             ('Default CryFind DB', 'using literally string compare', self.search_constants),
