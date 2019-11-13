@@ -5,7 +5,7 @@ import pathlib
 from collections import defaultdict
 from crylib import Constant, Result
 from crylib.db import dbs
-from crylib.db.CryptoAPI import whitelist
+from crylib.db.CryptoAPI import apinames
 
 class Search:
     def __init__(self, filename):
@@ -114,7 +114,7 @@ class Search:
         for dll in self.pe.DIRECTORY_ENTRY_IMPORT:
             dllname = dll.dll.lower()
             for value in dll.imports:
-                for names in [*whitelist.values()]:
+                for names in apinames.values():
                     if value.name in names:
                         results[-1].append(Result(constant = Constant(description = f'{value.name.decode()} ({dllname.decode()})')))
         return results
