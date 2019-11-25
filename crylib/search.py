@@ -1,11 +1,38 @@
 import os
 import yara
-import pefile
 import pathlib
 from collections import defaultdict
 from crylib import Constant, Result
 from crylib.db import dbs
 from crylib.db.CryptoAPI import apinames
+
+try:
+    import lief
+except ImportError:
+    lief = None
+
+try:
+    import pefile
+except ImportError:
+    pefile = None
+
+assert lief or pefile
+
+def _simple_valid_pefile(blob):
+    '''
+    Parameters
+    ----------
+    blob : bytes
+        binary blob to be checked
+    '''
+    if blob[:2] != b'MZ' or len(blob) < 0x40:
+        return False
+
+    offset = int.from_bytes(blob[0x3c:0x3c+4], 'little')
+    if offset + 4 > len(blob):
+        return False
+
+    return blob[offset:offset+4] == b'PE\0\0'
 
 class Search:
     def __init__(self, filename):
@@ -17,7 +44,9 @@ class Search:
         '''
         self.filename = filename
         self.binary = self._load_binary(filename)
-        self.pe = self._load_pe(filename)
+        self.pe = None
+        if _simple_valid_pefile(self.binary):
+            self.pe = self._load_pe()
 
         self.methods = [
             ('Default CryFind DB', 'using literally string compare', self.search_constants),
@@ -30,9 +59,15 @@ class Search:
         with open(filename, 'rb') as f:
             return f.read()
 
-    def _load_pe(self, filename):
+    def _load_pe(self):
+        if lief:
+            try:
+                return lief.PE.parse(raw=self.binary)
+            except lief.exception:
+                return None
+
         try:
-            return pefile.PE(filename)
+            return pefile.PE(data=self.binary)
         except pefile.PEFormatError:
             return None
 
@@ -108,16 +143,30 @@ class Search:
             a dictionary with address as key, list of Result instances as value.
         '''
         if not self.pe:
-            return {}
+            return {} # TODO: raise error or return None instead?
 
         results = defaultdict(list)
+        imports = self._enum_imports_lief() if lief else \
+                  self._enum_imports_pefile()
+        for dllname, function in imports:
+            for names in apinames.values():
+                if function in names:
+                    results[-1].append(Result(constant = Constant(description = f'{function.decode()} ({dllname.decode()})')))
+        return results
+
+    def _enum_imports_lief(self):
+        for dll in self.pe.imports:
+            # TODO: should use str for dll name and function name
+            dllname = dll.name.lower().encode('latin1')
+            for entry in dll.entries:
+                if not entry.is_ordinal:
+                    yield (dllname, entry.name.encode('latin1'))
+
+    def _enum_imports_pefile(self):
         for dll in self.pe.DIRECTORY_ENTRY_IMPORT:
             dllname = dll.dll.lower()
-            for value in dll.imports:
-                for names in apinames.values():
-                    if value.name in names:
-                        results[-1].append(Result(constant = Constant(description = f'{value.name.decode()} ({dllname.decode()})')))
-        return results
+            for entry in dll.imports:
+                yield (dllname, entry.name)
 
     def search_stackstrings(self):
         '''
@@ -181,15 +230,16 @@ class Search:
             print('[-] I found nothing')
         print()
 
-    def run(self, stackstrings = False):
+    def run(self, exclude_methods=[]):
         '''
         run all search method and print the result summary
         '''
         for name, description, method in self.methods:
-            if name == 'Stackstrings' and not stackstrings:
+            if name in exclude_methods:
                 continue
+
             print('=' * 30)
-            print(f'{name}')
+            print(name)
             print(f'↳ {description}')
             print('=' * 30)
             results = method()
