@@ -15,7 +15,7 @@ for dll, functions in apinames.items():
         data.append({
             'algorithm': 'Crypto API',
             'constant': {
-                'description': f'{function} ({dll})',
+                'description': f'{function.decode()} ({dll})',
                 'values': [function]
             }
         })
