@@ -2,14 +2,17 @@
 import sys
 from docopt import docopt
 from crylib.search import Search
+from crylib.generate import gen_yara
 
 __doc__ = f"""
 Usage:
 {sys.argv[0]} [-s] <filename>
+{sys.argv[0]} [-g]
 
 Options:
 -h --help           Show this screen
 -s --stackstrings   Enable stackstrings search, which use ida script [default: False]
+-g --generate       Generate yara rules from Constants DB
 """
 
 def banner():
@@ -25,11 +28,15 @@ def main():
     arguments = docopt(__doc__)
     filename = arguments['<filename>']
     stackstrings = arguments['--stackstrings']
+    generate = arguments['--generate']
 
-    banner()
-
-    search = Search(filename)
-    search.run(stackstrings = stackstrings)
+    if generate:
+        rules = gen_yara()
+        print(rules)
+    else:
+        banner()
+        search = Search(filename)
+        search.run(stackstrings = stackstrings)
 
 if __name__ == '__main__':
     try:
