@@ -7,7 +7,7 @@ from crylib.generate import gen_yara
 __doc__ = f"""
 Usage:
 {sys.argv[0]} [-s] <filename>
-{sys.argv[0]} [-g]
+{sys.argv[0]} -g
 
 Options:
 -h --help           Show this screen
