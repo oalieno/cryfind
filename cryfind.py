@@ -30,13 +30,17 @@ def main():
     stackstrings = arguments['--stackstrings']
     generate = arguments['--generate']
 
+    exclude_methods = ['Stackstrings']
+    if stackstrings:
+        exclude_methods.remove('Stackstrings')
+
     if generate:
         rules = gen_yara()
         print(rules)
     else:
         banner()
         search = Search(filename)
-        search.run(stackstrings = stackstrings)
+        search.run(exclude_methods)
 
 if __name__ == '__main__':
     try:

@@ -256,7 +256,7 @@ class Search:
             print('[-] I found nothing')
         print()
 
-    def run(self, exclude_methods=[]):
+    def run(self, exclude_methods = []):
         '''
         run all search method and print the result summary
         '''
