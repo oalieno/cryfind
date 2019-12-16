@@ -1,6 +1,7 @@
 import os
 import yara
 import pathlib
+from ahocorapy.keywordtree import KeywordTree
 from collections import defaultdict
 from crylib import Constant, Result
 from crylib.db import dbs
@@ -49,7 +50,7 @@ class Search:
             self.pe = self._load_pe()
 
         self.methods = [
-            ('Default CryFind DB', 'using literally string compare', self.search_constants),
+            #('Default CryFind DB', 'using literally string compare', self.search_constants),
             ('Yara-Rules Crypto Signatures', 'using yara rules in rules/ folder', self.search_yara),
             ('PE Import Table', 'search for known crypto api names in pe import table', self.search_pe_imports),
             ('Stackstrings', 'search for string made in runtime through pattern matching mov [rbp+??], ??', self.search_stackstrings)
@@ -72,7 +73,7 @@ class Search:
             return None
 
     @staticmethod
-    def search_constant(binary, constant):
+    def search_constant(binary, constant, lookup_table = None):
         '''
         find one constant.
 
@@ -90,8 +91,12 @@ class Search:
         '''
         addresses = []
         for value in constant.values:
-            if value in binary:
-                addresses.append(binary.find(value))
+            if lookup_table:
+                if value in lookup_table:
+                    addresses.append(lookup_table[value])
+            else:
+                if value in binary:
+                    addresses.append(binary.find(value))
         if len(addresses) == len(constant.values):
             return Result(constant = constant, address = min(addresses))
         return None
@@ -106,9 +111,24 @@ class Search:
             a dictionary with address as key, list of Result instances as value.
         '''
         results = defaultdict(list)
+
+        kwtree = KeywordTree()
         for db in dbs:
             for constant in db.constants:
-                result = self.search_constant(self.binary, constant)
+                for value in constant.values:
+                    kwtree.add(value)
+        kwtree.finalize()
+        answer = list(kwtree.search_all(self.binary))
+        table = {}
+        for x in answer:
+            if not table.get(x[0]):
+                table[x[0]] = x[1]
+            else:
+                table[x[0]] = min(table[x[0]], x[1])
+
+        for db in dbs:
+            for constant in db.constants:
+                result = self.search_constant(self.binary, constant, table)
                 if result and str(result.constant) not in [str(r.constant) for r in results[result.address]]:
                     results[result.address].append(result)
         return results
@@ -125,12 +145,18 @@ class Search:
         results = defaultdict(list)
         p = pathlib.Path(__file__).parent.parent
         for filename in p.glob('rules/*'):
-            with open(filename) as f:
+            with open(str(filename)) as f:
                 y = yara.compile(source = f.read())
             matches = y.match(data = self.binary)
             for match in matches:
-                algo, address = match.rule, match.strings[0][0]
-                results[address].append(Result(address = address, constant = Constant(algorithm = algo)))
+                name, address, meta = match.rule, match.strings[0][0], match.meta
+                if 'cryfind' in name:
+                    constant = Constant(algorithm = meta['algorithm'], description = meta['description'])
+                else:
+                    constant = Constant(algorithm = name)
+                result = Result(address = address, constant = constant)
+                if result and str(result.constant) not in [str(r.constant) for r in results[result.address]]:
+                    results[address].append(result)
         return results
 
     def search_pe_imports(self):
