@@ -19,59 +19,53 @@ TODO
 ```
 
 ```
-
 ==============================
-Default CryFind DB
-↳ using literally string compare
+Yara-Rules Crypto Signatures
+↳ using yara rules in rules/ folder
 ==============================
 
-[+] 0x5569
-      ZIP2 - encryption
 [+] 0x56b1
       ADLER_32
+[+] 0x683e
+      ZIP2 - encryption
 [+] 0x89fc
-    ┌ RIJNDAEL - [S] [char]
-    └ AES_forward_box
+    ┌ RijnDael_AES_CHAR
+    │ RijnDael_AES_LONG
+    └ AES - S-BOX
 [+] 0x8afc
-    ┌ RIJNDAEL - [S-inv] [char]
-    └ AES_inverse_box
+      AES - Inverse S-BOX
 [+] 0x8bfc
-    ┌ AES - TE0 Table
-    │ RIJNDAEL - [T1]
-    └ rijndael_te0
+    ┌ RijnDael_AES
+    └ AES - TE0 Table
 [+] 0x8ffc
     ┌ AES - TE1 Table
-    └ rijndael_te1
+    └ AES - TE0 Table
 [+] 0x93fc
-      rijndael_te2
+      AES - TE2 Table
 [+] 0x97fc
-      rijndael_te3
+      AES - TE3 Table
 [+] 0x9bfc
-      rijndael_td0
+      AES - TD0 Table
 [+] 0x9ffc
-      rijndael_td1
+      AES - TD1 Table
 [+] 0xa3fc
-      rijndael_td2
+      AES - TD2 Table
 [+] 0xa7fc
-      rijndael_td3
+      AES - TD3 Table
 [+] 0xce6c
-      zinflate_lengthStarts
-[+] 0xcee6
-      zinflate_lengthExtraBits
+      zinflate - lengthStarts
 [+] 0xcee8
-      ZLIB_length_extra_bits
+      zinflate - lengthExtraBits
 [+] 0xcf64
-    ┌ zinflate_distanceStarts
-    └ ZLIB_distance_starts
+      zinflate - distanceStarts
 [+] 0xcfdc
-    ┌ zinflate_distanceExtraBits
-    └ ZLIB_distance_extra_bits
+      zinflate - distanceExtraBits
 [+] 0xd054
-    ┌ CRC32
+    ┌ CRC32_table
     └ CRC32
 [+] 0xd254
-    ┌ CRC32 - [poly]
-    └ CRC_32_Generator
+    ┌ CRC32_poly_Constant
+    └ CRC32 - Polynomial
 [+] 0xdc16
       Crypto API - CryptReleaseContext (advapi32.dll)
 [+] 0xf0c4
@@ -90,27 +84,11 @@ Default CryFind DB
       Crypto API - MD5 (libeay32.dll)
 
 ==============================
-Yara-Rules Crypto Signatures
-↳ using yara rules in rules/ folder
-==============================
-
-[+] 0x89fc
-    ┌ RijnDael_AES_CHAR
-    └ RijnDael_AES_LONG
-[+] 0x8bfc
-      RijnDael_AES
-[+] 0xd054
-      CRC32_table
-[+] 0xd254
-      CRC32_poly_Constant
-
-==============================
 PE Import Table
 ↳ search for known crypto api names in pe import table
 ==============================
 
 CryptReleaseContext (advapi32.dll)
-
 ```
 
 ## python API
@@ -134,10 +112,15 @@ s.run() # run all above methods and print results
 
 I use the following methods to search crypto signatures
 
-1. Literally string compare, including **crypto costants** and **crypto api name**
+1. Literally string compare (using Aho–Corasick Algorithm), including **crypto costants** and **crypto api name**. This method is off by default. All Constants are in yara rules directory now. Use `./cryfind.py -g` to generate yara rules.
 2. yara rules
 3. **(PE executable only)** search **crypto api** name in pe import table 
 4. Use [Flare-ida ironstrings](https://www.fireeye.com/blog/threat-research/2019/02/recovering-stackstrings-using-emulation-with-ironstrings.html) to search in stackstrings
+
+## TODO
+
+1. Migrate Flare-ida ironstrings from IDA to Ghidra
+2. Do dynamic analysis
 
 ## Database Resource
 
