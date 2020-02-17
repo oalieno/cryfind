@@ -1,23 +1,6 @@
-class Constant:
-    def __init__(self, algorithm = '', values = None, description = ''):
-        self.algorithm = algorithm
-        self.values = values
-        if values == None:
-            self.values = []
-        self.description = description
-    def __str__(self):
-        text = ''
-        if self.algorithm:
-            text += self.algorithm
-        if self.algorithm and self.description:
-            text += ' - '
-        if self.description:
-            text += self.description
-        return text
+#!/usr/bin/env python3
+from .findconst import find_const, find_const_yara
+from .stackstrings import stackstrings
+from .peimport import pe_import
 
-class Result:
-    def __init__(self, constant = None, address = -1):
-        self.constant = constant
-        if constant == None:
-            self.constant = constant
-        self.address = address
+__all__ = ['find_const', 'find_const_yara', 'stackstrings', 'pe_import']
