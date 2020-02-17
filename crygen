@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 import random
+from docopt import docopt
+
 from crylib.constants import constants
 
-def gen_yara(constants, prefix = 'cryfind'):
+__doc__ = f"""Usage: crygen [-p PREFIX]
+
+-h --help           Show this screen
+-p PREFIX           Prefix of the generated yara rule name [default: cry]
+"""
+
+def gen_yara(constants, prefix = 'cry'):
     rules = ''
     for constant in constants:
         rules += f'rule {prefix}_{random.getrandbits(40)} {{\n'
@@ -17,7 +25,9 @@ def gen_yara(constants, prefix = 'cryfind'):
     return rules
 
 def main():
-    print(gen_yara(constants))
+    arguments = docopt(__doc__)
+    prefix = arguments['-p']
+    print(gen_yara(constants, prefix = prefix))
 
 if __name__ == '__main__':
     main()

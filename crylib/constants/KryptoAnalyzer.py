@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# https://www.aldeid.com/wiki/PEiD#Krypto_Analyzer
+# http://www.dcs.fmph.uniba.sk/zri/6.prednaska/tools/PEiD/plugins/kanal.htm
 constants = [
     {
         'name': 'MISTY [char]',

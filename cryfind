@@ -6,10 +6,8 @@ from docopt import docopt
 from crylib import *
 from crylib.constants import constants
 
-__doc__ = f"""
-Usage: cryfind [-s SOURCES] [-m METHODS] [-a] <filename>
+__doc__ = f"""Usage: cryfind [-s SOURCES] [-m METHODS] [-a] <filename>
 
-Options:
 -h --help           Show this screen
 -s SOURCES          Sources to be searched, could be : plain, stackstrings [default: plain]
 -m METHODS          Methods to be used, could be : string, xor, yara, peimport [default: string,yara]

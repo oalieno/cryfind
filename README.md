@@ -9,122 +9,57 @@ TODO
 ## Usage
 
 ```
-./cryfind.py [-l VALUE] <filename>
+Usage: cryfind [-s SOURCES] [-m METHODS] [-a] <filename>
+
+-h --help           Show this screen
+-s SOURCES          Sources to be searched, could be : plain, stackstrings [default: plain]
+-m METHODS          Methods to be used, could be : string, xor, yara, peimport [default: string,yara]
+-a --all            Use all methods and sources
 ```
 
-## Example
-
 ```
-./cryfind.py WannaCry
-```
+Usage: crygen [-p PREFIX]
 
-```
-==============================
-Yara-Rules Crypto Signatures
-↳ using yara rules in rules/ folder
-==============================
-
-[+] 0x56b1
-      ADLER_32
-[+] 0x683e
-      ZIP2 - encryption
-[+] 0x89fc
-    ┌ RijnDael_AES_CHAR
-    │ RijnDael_AES_LONG
-    └ AES - S-BOX
-[+] 0x8afc
-      AES - Inverse S-BOX
-[+] 0x8bfc
-    ┌ RijnDael_AES
-    └ AES - TE0 Table
-[+] 0x8ffc
-    ┌ AES - TE1 Table
-    └ AES - TE0 Table
-[+] 0x93fc
-      AES - TE2 Table
-[+] 0x97fc
-      AES - TE3 Table
-[+] 0x9bfc
-      AES - TD0 Table
-[+] 0x9ffc
-      AES - TD1 Table
-[+] 0xa3fc
-      AES - TD2 Table
-[+] 0xa7fc
-      AES - TD3 Table
-[+] 0xce6c
-      zinflate - lengthStarts
-[+] 0xcee8
-      zinflate - lengthExtraBits
-[+] 0xcf64
-      zinflate - distanceStarts
-[+] 0xcfdc
-      zinflate - distanceExtraBits
-[+] 0xd054
-    ┌ CRC32_table
-    └ CRC32
-[+] 0xd254
-    ┌ CRC32_poly_Constant
-    └ CRC32 - Polynomial
-[+] 0xdc16
-      Crypto API - CryptReleaseContext (advapi32.dll)
-[+] 0xf0c4
-      Crypto API - CryptGenKey (advapi32.dll)
-[+] 0xf0d0
-      Crypto API - CryptDecrypt (advapi32.dll)
-[+] 0xf0e0
-      Crypto API - CryptEncrypt (advapi32.dll)
-[+] 0xf0f0
-      Crypto API - CryptDestroyKey (advapi32.dll)
-[+] 0xf100
-      Crypto API - CryptImportKey (advapi32.dll)
-[+] 0xf110
-      Crypto API - CryptAcquireContextA (advapi32.dll)
-[+] 0x1e4483
-      Crypto API - MD5 (libeay32.dll)
-
-==============================
-PE Import Table
-↳ search for known crypto api names in pe import table
-==============================
-
-CryptReleaseContext (advapi32.dll)
+-h --help           Show this screen
+-p PREFIX           Prefix of the generated yara rule name [default: cry]
 ```
 
 ## python API
 
 ```python
-from crylib.search import Search
+from crylib import *
+from crylib.constants import constants
 
-s = Search('./binary')
+test = open('test', 'rb').read()
+find_const(test, [{'name': 'test string 1', 'values': [b'\xde\xad\xbe\xef']}])
+find_const(stackstrings(test), costants, xor = True)
 
-results = s.search_constants()
-results = s.search_yara()
-results = s.search_pe_imports()
-results = s.search_stackstrings()
-
-s.print_results(results)
-
-s.run() # run all above methods and print results
+rule = open('test.rules').read()
+find_const_yara(test, rule)
 ```
+
+## Sources
+
+Instead of searching in plain binary, you can also search in **stackstrings**. I use radare2 to emulate the executable and extract the string from stack.
 
 ## Methods
 
 I use the following methods to search crypto signatures
 
-1. Literally string compare (using Aho–Corasick Algorithm), including **crypto costants** and **crypto api name**. This method is off by default. All Constants are in yara rules directory now. Use `./cryfind.py -g` to generate yara rules.
-2. yara rules
-3. **(PE executable only)** search **crypto api** name in pe import table 
-4. Use [Flare-ida ironstrings](https://www.fireeye.com/blog/threat-research/2019/02/recovering-stackstrings-using-emulation-with-ironstrings.html) to search in stackstrings
+1. `string` : Literally string compare (using Aho–Corasick Algorithm), including **crypto costants** and **crypto api name**.
+2. `xor` : Try all 256 possibililties to xor the binary before search.
+3. `yara` : Using yara rules.
+4. `peimport` : **(PE executable only)** search **crypto api name** in pe import table.
 
 ## TODO
 
-1. Migrate Flare-ida ironstrings from IDA to Ghidra
-2. Do dynamic analysis
+2. pipenv
+3. Dockerize the tools
+4. Do dynamic analysis
 
-## Database Resource
+## Constants Resource
 
-I merge the following crypto signatures into my database
+I merge the following crypto constants signatures into my database
 
 * KryptoAnalyzer
     - http://www.dcs.fmph.uniba.sk/zri/6.prednaska/tools/PEiD/plugins/kanal.htm
