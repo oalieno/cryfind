@@ -32,7 +32,7 @@ from crylib.constants import constants
 
 test = open('test', 'rb').read()
 find_const(test, [{'name': 'test string 1', 'values': [b'\xde\xad\xbe\xef']}])
-find_const(stackstrings(test), costants, xor = True)
+find_const(stackstrings(test), constants, xor = True)
 
 rule = open('test.rules').read()
 find_const_yara(test, rule)
@@ -40,7 +40,8 @@ find_const_yara(test, rule)
 
 ## Sources
 
-Instead of searching in plain binary, you can also search in **stackstrings**. I use radare2 to emulate the executable and extract the string from stack.
+1. `plain` : Search from plain binary.
+2. `stackstrings` : Search in **stackstrings**, I use radare2 to emulate and extract the string from stack.
 
 ## Methods
 
