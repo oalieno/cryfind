@@ -40,7 +40,7 @@ find_const_yara(test, rule)
 
 ## Sources
 
-1. `plain` : Search from plain binary.
+1. `plain` : Search in plain binary.
 2. `stackstrings` : Search in **stackstrings**, I use radare2 to emulate and extract the string from stack.
 
 ## Methods
