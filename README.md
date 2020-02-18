@@ -47,16 +47,10 @@ find_const_yara(test, rule)
 
 I use the following methods to search crypto signatures
 
-1. `string` : Literally string compare (using Aho–Corasick Algorithm), including **crypto costants** and **crypto api name**.
+1. `string` : Literally string compare (using Aho–Corasick Algorithm)
 2. `xor` : Try all 256 possibililties to xor the binary before search.
 3. `yara` : Using yara rules.
 4. `peimport` : **(PE executable only)** search **crypto api name** in pe import table.
-
-## TODO
-
-2. pipenv
-3. Dockerize the tools
-4. Do dynamic analysis
 
 ## Constants Resource
 
@@ -68,3 +62,9 @@ I merge the following crypto constants signatures into my database
     - https://github.com/ANSSI-FR/polichombr/blob/dev/polichombr/analysis_tools/AnalyzeIt.rb#L26
 * Yara Rules - crypto_signatures.yar
     - https://github.com/Yara-Rules/rules/blob/master/Crypto/crypto_signatures.yar
+
+## TODO
+
+2. pipenv
+3. Dockerize the tools
+4. Do dynamic analysis
