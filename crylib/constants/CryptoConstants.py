@@ -747,3 +747,10 @@ constants += [
         'values': b'''e\x89\x07l\x80V,\x9d\x00\x00l\xef\xdf\xb0\x08\x99'''
     },
 ]
+
+constants += [
+    {
+        'name': 'RSA [e]',
+        'values': b'''65537'''
+    }
+]

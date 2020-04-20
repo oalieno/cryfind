@@ -119,8 +119,6 @@ def find_const(binarys, constants, encode = False, xor = False):
     constants_new = []
     for constant in constants:
         v = constant['values']
-        if len(set(v[:32])) > 10:
-            v = v[:32]
             
         constants_new.append({
             'name': constant['name'],
