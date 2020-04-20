@@ -2,9 +2,9 @@
     from https://github.com/Yara-Rules/rules/tree/master/Crypto
     This Yara ruleset is under the GNU-GPLv2 license (http://www.gnu.org/licenses/gpl-2.0.html) and open to any user or organization, as long as you use it under this license.
 */
-rule Big_Numbers0
-{
+rule Big_Numbers0 {
 	meta:
+		name = "Big_Numbers0"
 		author = "_pusher_"
 		description = "Looks for big numbers 20:sized"
 		date = "2016-07"
@@ -14,9 +14,9 @@ rule Big_Numbers0
 		$c0
 }
 
-rule Big_Numbers1
-{
+rule Big_Numbers1 {
 	meta:
+		name = "Big_Numbers1"
 		author = "_pusher_"
 		description = "Looks for big numbers 20:sized"
 		date = "2016-07"
@@ -28,6 +28,7 @@ rule Big_Numbers1
 
 rule Prime_Constants_char {
 	meta:
+		name = "Prime_Constants_char"
 		author = "_pusher_"
 		description = "List of primes [char]"
 		date = "2016-07"
@@ -39,6 +40,7 @@ rule Prime_Constants_char {
 
 rule Prime_Constants_long {
 	meta:
+		name = "Prime_Constants_long"
 		author = "_pusher_"
 		description = "List of primes [long]"
 		date = "2016-07"
@@ -51,6 +53,7 @@ rule Prime_Constants_long {
 
 rule Advapi_Hash_API {
 	meta:
+		name = "Advapi_Hash_API"
 		author = "_pusher_"
 		description = "Looks for advapi API functions"
 		date = "2016-07"
@@ -65,6 +68,7 @@ rule Advapi_Hash_API {
 
 rule Crypt32_CryptBinaryToString_API {
 	meta:
+		name = "Crypt32_CryptBinaryToString_API"
 		author = "_pusher_"
 		description = "Looks for crypt32 CryptBinaryToStringA function"
 		date = "2016-08"
@@ -77,6 +81,7 @@ rule Crypt32_CryptBinaryToString_API {
 
 rule CRC32c_poly_Constant {
 	meta:
+		name = "CRC32c_poly_Constant"
 		author = "_pusher_"
 		description = "Look for CRC32c (Castagnoli) [poly]"
 		date = "2016-08"
@@ -88,6 +93,7 @@ rule CRC32c_poly_Constant {
 
 rule CRC32_poly_Constant {
 	meta:
+		name = "CRC32_poly_Constant"
 		author = "_pusher_"
 		description = "Look for CRC32 [poly]"
 		date = "2015-05"
@@ -100,6 +106,7 @@ rule CRC32_poly_Constant {
 
 rule CRC32_table {
 	meta:
+		name = "CRC32_table"
 		author = "_pusher_"
 		description = "Look for CRC32 table"
 		date = "2015-05"
@@ -112,6 +119,7 @@ rule CRC32_table {
 
 rule CRC32_table_lookup {
 	meta:
+		name = "CRC32_table_lookup"
 		author = "_pusher_"
 		description = "CRC32 table lookup"
 		date = "2015-06"
@@ -124,6 +132,7 @@ rule CRC32_table_lookup {
 
 rule CRC32b_poly_Constant {
 	meta:
+		name = "CRC32b_poly_Constant"
 		author = "_pusher_"
 		description = "Look for CRC32b [poly]"
 		date = "2016-04"
@@ -137,6 +146,7 @@ rule CRC32b_poly_Constant {
 
 rule CRC16_table {
 	meta:
+		name = "CRC16_table"
 		author = "_pusher_"
 		description = "Look for CRC16 table"
 		date = "2016-04"
@@ -150,6 +160,7 @@ rule CRC16_table {
 
 rule FlyUtilsCnDES_ECB_Encrypt {
 	meta:
+		name = "FlyUtilsCnDES_ECB_Encrypt"
 		author = "_pusher_"
 		description = "Look for FlyUtils.CnDES Encrypt ECB function"
 		date = "2016-07"
@@ -161,6 +172,7 @@ rule FlyUtilsCnDES_ECB_Encrypt {
 
 rule FlyUtilsCnDES_ECB_Decrypt {
 	meta:
+		name = "FlyUtilsCnDES_ECB_Decrypt"
 		author = "_pusher_"
 		description = "Look for FlyUtils.CnDES Decrypt ECB function"
 		date = "2016-07"
@@ -172,6 +184,7 @@ rule FlyUtilsCnDES_ECB_Decrypt {
 
 rule Elf_Hash {
 	meta:
+		name = "Elf_Hash"
 		author = "_pusher_"
 		description = "Look for ElfHash"
 		date = "2015-06"
@@ -190,6 +203,7 @@ rule Elf_Hash {
 
 rule BLOWFISH_Constants {
 	meta:
+		name = "BLOWFISH_Constants"
 		author = "phoul (@phoul)"
 		description = "Look for Blowfish constants"
 		date = "2014-01"
@@ -213,6 +227,7 @@ rule BLOWFISH_Constants {
 
 rule MD5_Constants {
 	meta:
+		name = "MD5_Constants"
 		author = "phoul (@phoul)"
 		description = "Look for MD5 constants"
 		date = "2014-01"
@@ -236,6 +251,7 @@ rule MD5_Constants {
 
 rule MD5_API {
 	meta:
+		name = "MD5_API"
 		author = "_pusher_"
 		description = "Looks for MD5 API"
 		date = "2016-07"
@@ -251,6 +267,7 @@ rule MD5_API {
 
 rule RC6_Constants {
 	meta:
+		name = "RC6_Constants"
 		author = "chort (@chort0)"
 		description = "Look for RC6 magic constants in binary"
 		reference = "https://twitter.com/mikko/status/417620511397400576"
@@ -268,6 +285,7 @@ rule RC6_Constants {
 
 rule RIPEMD160_Constants {
 	meta:
+		name = "RIPEMD160_Constants"
 		author = "phoul (@phoul)"
 		description = "Look for RIPEMD-160 constants"
 		date = "2014-01"
@@ -289,6 +307,7 @@ rule RIPEMD160_Constants {
 
 rule SHA1_Constants {
 	meta:
+		name = "SHA1_Constants"
 		author = "phoul (@phoul)"
 		description = "Look for SHA1 constants"
 		date = "2014-01"
@@ -312,6 +331,7 @@ rule SHA1_Constants {
 
 rule SHA512_Constants {
 	meta:
+		name = "SHA512_Constants"
 		author = "phoul (@phoul)"
 		description = "Look for SHA384/SHA512 constants"
 		date = "2014-01"
@@ -333,6 +353,7 @@ rule SHA512_Constants {
 
 rule TEAN {
 	meta:
+		name = "TEAN"
 		author = "_pusher_"
 		description = "Look for TEA Encryption"
 		date = "2016-08"
@@ -344,6 +365,7 @@ rule TEAN {
 
 rule WHIRLPOOL_Constants {
 	meta:
+		name = "WHIRLPOOL_Constants"
 		author = "phoul (@phoul)"
 		description = "Look for WhirlPool constants"
 		date = "2014-02"
@@ -359,6 +381,7 @@ rule WHIRLPOOL_Constants {
 
 rule DarkEYEv3_Cryptor {
 	meta:
+		name = "DarkEYEv3_Cryptor"
 		description = "Rule to detect DarkEYEv3 encrypted executables (often malware)"
 		author = "Florian Roth"
 		reference = "http://darkeyev3.blogspot.fi/"
@@ -379,8 +402,9 @@ rule DarkEYEv3_Cryptor {
 		uint16(0) == 0x5a4d and $s0
 }
 
-rule Miracl_powmod
-{	meta:
+rule Miracl_powmod {
+	meta:
+		name = "Miracl_powmod"
 		author = "Maxx"
 		description = "Miracl powmod"
 	strings:
@@ -389,8 +413,9 @@ rule Miracl_powmod
 		$c0
 }
 
-rule Miracl_crt
-{	meta:
+rule Miracl_crt {
+	meta:
+		name = "Miracl_crt"
 		author = "Maxx"
 		description = "Miracl crt"
 	strings:
@@ -399,8 +424,9 @@ rule Miracl_crt
 		$c0
 }
 
-rule CryptoPP_a_exp_b_mod_c
-{	meta:
+rule CryptoPP_a_exp_b_mod_c {
+	meta:
+		name = "CryptoPP_a_exp_b_mod_c"
 		author = "Maxx"
 		description = "CryptoPP a_exp_b_mod_c"
 	strings:
@@ -411,8 +437,9 @@ rule CryptoPP_a_exp_b_mod_c
 		any of them
 }
 
-rule CryptoPP_modulo
-{	meta:
+rule CryptoPP_modulo {
+	meta:
+		name = "CryptoPP_modulo"
 		author = "Maxx"
 		description = "CryptoPP modulo"
 	strings:
@@ -424,8 +451,9 @@ rule CryptoPP_modulo
 		any of them
 }
 
-rule FGint_MontgomeryModExp
-{	meta:
+rule FGint_MontgomeryModExp {
+	meta:
+		name = "FGint_MontgomeryModExp"
 		author = "_pusher_"
 		date = "2015-06"
 		version = "0.2"
@@ -439,8 +467,9 @@ rule FGint_MontgomeryModExp
 		any of them
 }
 
-rule FGint_FGIntModExp
-{	meta:
+rule FGint_FGIntModExp {
+	meta:
+		name = "FGint_FGIntModExp"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint FGIntModExp"
@@ -450,8 +479,9 @@ rule FGint_FGIntModExp
 		$c0
 }
 
-rule FGint_MulByInt
-{	meta:
+rule FGint_MulByInt {
+	meta:
+		name = "FGint_MulByInt"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint MulByInt"
@@ -461,8 +491,9 @@ rule FGint_MulByInt
 		$c0
 }
 
-rule FGint_DivMod
-{	meta:
+rule FGint_DivMod {
+	meta:
+		name = "FGint_DivMod"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint FGIntDivMod"
@@ -472,8 +503,9 @@ rule FGint_DivMod
 		$c0
 }
 
-rule FGint_FGIntDestroy
-{	meta:
+rule FGint_FGIntDestroy {
+	meta:
+		name = "FGint_FGIntDestroy"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint FGIntDestroy"
@@ -483,8 +515,9 @@ rule FGint_FGIntDestroy
 		$c0
 }
 
-rule FGint_Base10StringToGInt
-{	meta:
+rule FGint_Base10StringToGInt {
+	meta:
+		name = "FGint_Base10StringToGInt"
 		author = "_pusher_"
 		date = "2015-06"
 		version = "0.2"
@@ -498,8 +531,9 @@ rule FGint_Base10StringToGInt
 		any of them
 }
 
-rule FGint_ConvertBase256to64
-{	meta:
+rule FGint_ConvertBase256to64 {
+	meta:
+		name = "FGint_ConvertBase256to64"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint ConvertBase256to64"
@@ -509,8 +543,9 @@ rule FGint_ConvertBase256to64
 		$c0
 }
 
-rule FGint_ConvertHexStringToBase256String
-{	meta:
+rule FGint_ConvertHexStringToBase256String {
+	meta:
+		name = "FGint_ConvertHexStringToBase256String"
 		author = "_pusher_"
 		date = "2015-06"
 		version = "0.2"
@@ -521,8 +556,9 @@ rule FGint_ConvertHexStringToBase256String
 		$c0
 }
 
-rule FGint_Base256StringToGInt
-{	meta:
+rule FGint_Base256StringToGInt {
+	meta:
+		name = "FGint_Base256StringToGInt"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint Base256StringToGInt"
@@ -532,8 +568,9 @@ rule FGint_Base256StringToGInt
 		$c0
 }
 
-rule FGint_FGIntToBase256String
-{	meta:
+rule FGint_FGIntToBase256String {
+	meta:
+		name = "FGint_FGIntToBase256String"
 		author = "_pusher_"
 		date = "2015-06"
 		version = "0.2"
@@ -545,8 +582,9 @@ rule FGint_FGIntToBase256String
 		any of them
 }
 
-rule FGint_ConvertBase256StringToHexString
-{	meta:
+rule FGint_ConvertBase256StringToHexString {
+	meta:
+		name = "FGint_ConvertBase256StringToHexString"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint ConvertBase256StringToHexString"
@@ -557,8 +595,9 @@ rule FGint_ConvertBase256StringToHexString
 }
 
 
-rule FGint_PGPConvertBase256to64
-{	meta:
+rule FGint_PGPConvertBase256to64 {
+	meta:
+		name = "FGint_PGPConvertBase256to64"
 		author = "_pusher_"
 		date = "2016-08"
 		description = "FGint PGPConvertBase256to64"
@@ -569,8 +608,9 @@ rule FGint_PGPConvertBase256to64
 }
 
 
-rule FGint_RSAEncrypt
-{	meta:
+rule FGint_RSAEncrypt {
+	meta:
+		name = "FGint_RSAEncrypt"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "FGint RSAEncrypt"
@@ -580,8 +620,9 @@ rule FGint_RSAEncrypt
 		$c0
 }
 
-rule FGint_RsaDecrypt
-{	meta:
+rule FGint_RsaDecrypt {
+	meta:
+		name = "FGint_RsaDecrypt"
 		author = "Maxx"
 		description = "FGint RsaDecrypt"
 	strings:
@@ -590,8 +631,9 @@ rule FGint_RsaDecrypt
 		$c0
 }
 
-rule FGint_RSAVerify
-{	meta:
+rule FGint_RSAVerify {
+	meta:
+		name = "FGint_RSAVerify"
 		author = "_pusher_"
 		description = "FGint RSAVerify"
 	strings:
@@ -600,8 +642,9 @@ rule FGint_RSAVerify
 		$c0
 }
 
-rule FGint_FindPrimeGoodCurveAndPoint
-{	meta:
+rule FGint_FindPrimeGoodCurveAndPoint {
+	meta:
+		name = "FGint_FindPrimeGoodCurveAndPoint"
 		author = "_pusher_"
 		date = "2015-06"
 		description = "FGint FindPrimeGoodCurveAndPoint"
@@ -612,8 +655,9 @@ rule FGint_FindPrimeGoodCurveAndPoint
 		$c0
 }
 
-rule FGint_ECElGamalEncrypt
-{	meta:
+rule FGint_ECElGamalEncrypt {
+	meta:
+		name = "FGint_ECElGamalEncrypt"
 		author = "_pusher_"
 		date = "2016-08"
 		description = "FGint ECElGamalEncrypt"
@@ -625,8 +669,9 @@ rule FGint_ECElGamalEncrypt
 		$c0 or $c1
 }
 
-rule FGint_ECAddPoints
-{	meta:
+rule FGint_ECAddPoints {
+	meta:
+		name = "FGint_ECAddPoints"
 		author = "_pusher_"
 		date = "2015-06"
 		description = "FGint ECAddPoints"
@@ -637,8 +682,9 @@ rule FGint_ECAddPoints
 		$c0
 }
 
-rule FGint_ECPointKMultiple
-{	meta:
+rule FGint_ECPointKMultiple {
+	meta:
+		name = "FGint_ECPointKMultiple"
 		author = "_pusher_"
 		date = "2015-06"
 		description = "FGint ECPointKMultiple"
@@ -649,8 +695,9 @@ rule FGint_ECPointKMultiple
 		$c0
 }
 
-rule FGint_ECPointDestroy
-{	meta:
+rule FGint_ECPointDestroy {
+	meta:
+		name = "FGint_ECPointDestroy"
 		author = "_pusher_"
 		date = "2015-06"
 		description = "FGint ECPointDestroy"
@@ -661,8 +708,9 @@ rule FGint_ECPointDestroy
 		$c0
 }
 
-rule FGint_DSAPrimeSearch
-{	meta:
+rule FGint_DSAPrimeSearch {
+	meta:
+		name = "FGint_DSAPrimeSearch"
 		author = "_pusher_"
 		date = "2016-08"
 		description = "FGint DSAPrimeSearch"
@@ -673,8 +721,9 @@ rule FGint_DSAPrimeSearch
 		$c0
 }
 
-rule FGint_DSASign
-{	meta:
+rule FGint_DSASign {
+	meta:
+		name = "FGint_DSASign"
 		author = "_pusher_"
 		date = "2016-08"
 		description = "FGint DSASign"
@@ -685,8 +734,9 @@ rule FGint_DSASign
 		$c0
 }
 
-rule FGint_DSAVerify
-{	meta:
+rule FGint_DSAVerify {
+	meta:
+		name = "FGint_DSAVerify"
 		author = "_pusher_"
 		date = "2016-08"
 		description = "FGint DSAVerify"
@@ -698,8 +748,9 @@ rule FGint_DSAVerify
 }
 
 
-rule DES_Long
-{	meta:
+rule DES_Long {
+	meta:
+		name = "DES_Long"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "DES [long]"
@@ -709,8 +760,9 @@ rule DES_Long
 		$c0
 }
 
-rule DES_sbox
-{	meta:
+rule DES_sbox {
+	meta:
+		name = "DES_sbox"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "DES [sbox]"
@@ -720,8 +772,9 @@ rule DES_sbox
 		$c0
 }
 
-rule DES_pbox_long
-{	meta:
+rule DES_pbox_long {
+	meta:
+		name = "DES_pbox_long"
 		author = "_pusher_"
 		date = "2015-05"
 		description = "DES [pbox] [long]"
@@ -731,8 +784,9 @@ rule DES_pbox_long
 		$c0
 }
 
-rule OpenSSL_BN_mod_exp2_mont
-{	meta:
+rule OpenSSL_BN_mod_exp2_mont {
+	meta:
+		name = "OpenSSL_BN_mod_exp2_mont"
 		author = "Maxx"
 		description = "OpenSSL BN_mod_exp2_mont"
 	strings:
@@ -741,8 +795,9 @@ rule OpenSSL_BN_mod_exp2_mont
 		$c0
 }
 
-rule OpenSSL_BN_mod_exp_mont
-{	meta:
+rule OpenSSL_BN_mod_exp_mont {
+	meta:
+		name = "OpenSSL_BN_mod_exp_mont"
 		author = "Maxx"
 		description = "OpenSSL BN_mod_exp_mont"
 	strings:
@@ -751,8 +806,9 @@ rule OpenSSL_BN_mod_exp_mont
 		$c0
 }
 
-rule OpenSSL_BN_mod_exp_recp
-{	meta:
+rule OpenSSL_BN_mod_exp_recp {
+	meta:
+		name = "OpenSSL_BN_mod_exp_recp"
 		author = "Maxx"
 		description = "OpenSSL BN_mod_exp_recp"
 	strings:
@@ -761,8 +817,9 @@ rule OpenSSL_BN_mod_exp_recp
 		$c0
 }
 
-rule OpenSSL_BN_mod_exp_simple
-{	meta:
+rule OpenSSL_BN_mod_exp_simple {
+	meta:
+		name = "OpenSSL_BN_mod_exp_simple"
 		author = "Maxx"
 		description = "OpenSSL BN_mod_exp_simple"
 	strings:
@@ -771,8 +828,9 @@ rule OpenSSL_BN_mod_exp_simple
 		$c0
 }
 
-rule OpenSSL_BN_mod_exp_inverse
-{	meta:
+rule OpenSSL_BN_mod_exp_inverse {
+	meta:
+		name = "OpenSSL_BN_mod_exp_inverse"
 		author = "Maxx"
 		description = "OpenSSL BN_mod_exp_inverse"
 	strings:
@@ -781,9 +839,9 @@ rule OpenSSL_BN_mod_exp_inverse
 		$c0
 }
 
-rule OpenSSL_DSA
-{
+rule OpenSSL_DSA {
 	meta:
+		name = "OpenSSL_DSA"
 		author="_pusher_"
 		date="2016-08"
 	strings:	
@@ -801,8 +859,9 @@ rule OpenSSL_DSA
 		7 of ($a*)
 }
 
-rule FGint_RsaSign
-{	meta:
+rule FGint_RsaSign {
+	meta:
+		name = "FGint_RsaSign"
 		author = "Maxx"
 		description = "FGint RsaSign"
 	strings:
@@ -812,8 +871,9 @@ rule FGint_RsaSign
 }
 
 
-rule LockBox_RsaEncryptFile
-{	meta:
+rule LockBox_RsaEncryptFile {
+	meta:
+		name = "LockBox_RsaEncryptFile"
 		author = "Maxx"
 		description = "LockBox RsaEncryptFile"
 	strings:
@@ -822,8 +882,9 @@ rule LockBox_RsaEncryptFile
 		$c0
 }
 
-rule LockBox_DecryptRsaEx
-{	meta:
+rule LockBox_DecryptRsaEx {
+	meta:
+		name = "LockBox_DecryptRsaEx"
 		author = "Maxx"
 		description = "LockBox DecryptRsaEx"
 	strings:
@@ -832,8 +893,9 @@ rule LockBox_DecryptRsaEx
 		$c0
 }
 
-rule LockBox_EncryptRsaEx
-{	meta:
+rule LockBox_EncryptRsaEx {
+	meta:
+		name = "LockBox_EncryptRsaEx"
 		author = "Maxx"
 		description = "LockBox EncryptRsaEx"
 	strings:
@@ -842,8 +904,9 @@ rule LockBox_EncryptRsaEx
 		$c0
 }
 
-rule LockBox_TlbRsaKey
-{	meta:
+rule LockBox_TlbRsaKey {
+	meta:
+		name = "LockBox_TlbRsaKey"
 		author = "Maxx"
 		description = "LockBox TlbRsaKey"
 	strings:
@@ -852,8 +915,9 @@ rule LockBox_TlbRsaKey
 		$c0
 }
 
-rule BigDig_bpInit
-{	meta:
+rule BigDig_bpInit {
+	meta:
+		name = "BigDig_bpInit"
 		author = "Maxx"
 		description = "BigDig bpInit"
 	strings:
@@ -862,8 +926,9 @@ rule BigDig_bpInit
 		$c0
 }
 
-rule BigDig_mpModExp
-{	meta:
+rule BigDig_mpModExp {
+	meta:
+		name = "BigDig_mpModExp"
 		author = "Maxx"
 		description = "BigDig mpModExp"
 	strings:
@@ -872,8 +937,9 @@ rule BigDig_mpModExp
 		$c0
 }
 
-rule BigDig_mpModInv
-{	meta:
+rule BigDig_mpModInv {
+	meta:
+		name = "BigDig_mpModInv"
 		author = "Maxx"
 		description = "BigDig mpModInv"
 	strings:
@@ -882,8 +948,9 @@ rule BigDig_mpModInv
 		$c0
 }
 
-rule BigDig_mpModMult
-{	meta:
+rule BigDig_mpModMult {
+	meta:
+		name = "BigDig_mpModMult"
 		author = "Maxx"
 		description = "BigDig mpModMult"
 	strings:
@@ -892,8 +959,9 @@ rule BigDig_mpModMult
 		$c0
 }
 
-rule BigDig_mpModulo
-{	meta:
+rule BigDig_mpModulo {
+	meta:
+		name = "BigDig_mpModulo"
 		author = "Maxx"
 		description = "BigDig mpModulo"
 	strings:
@@ -902,8 +970,9 @@ rule BigDig_mpModulo
 		$c0
 }
 
-rule BigDig_spModExpB
-{	meta:
+rule BigDig_spModExpB {
+	meta:
+		name = "BigDig_spModExpB"
 		author = "Maxx"
 		description = "BigDig spModExpB"
 	strings:
@@ -912,8 +981,9 @@ rule BigDig_spModExpB
 		$c0
 }
 
-rule BigDig_spModInv
-{	meta:
+rule BigDig_spModInv {
+	meta:
+		name = "BigDig_spModInv"
 		author = "Maxx"
 		description = "BigDig spModInv"
 	strings:
@@ -922,8 +992,9 @@ rule BigDig_spModInv
 		$c0
 }
 
-rule BigDig_spModMult
-{	meta:
+rule BigDig_spModMult {
+	meta:
+		name = "BigDig_spModMult"
 		author = "Maxx"
 		description = "BigDig spModMult"
 	strings:
@@ -932,8 +1003,9 @@ rule BigDig_spModMult
 		$c0
 }
 
-rule CryptoPP_ApplyFunction
-{	meta:
+rule CryptoPP_ApplyFunction {
+	meta:
+		name = "CryptoPP_ApplyFunction"
 		author = "Maxx"
 		description = "CryptoPP ApplyFunction"
 	strings:
@@ -943,8 +1015,9 @@ rule CryptoPP_ApplyFunction
 		any of them
 }
 
-rule CryptoPP_RsaFunction
-{	meta:
+rule CryptoPP_RsaFunction {
+	meta:
+		name = "CryptoPP_RsaFunction"
 		author = "Maxx"
 		description = "CryptoPP RsaFunction"
 	strings:
@@ -955,8 +1028,9 @@ rule CryptoPP_RsaFunction
 		any of them
 }
 
-rule CryptoPP_Integer_constructor
-{	meta:
+rule CryptoPP_Integer_constructor {
+	meta:
+		name = "CryptoPP_Integer_constructor"
 		author = "Maxx"
 		description = "CryptoPP Integer constructor"
 	strings:
@@ -968,8 +1042,9 @@ rule CryptoPP_Integer_constructor
 		any of them
 }
 
-rule RijnDael_AES
-{	meta:
+rule RijnDael_AES {
+	meta:
+		name = "RijnDael_AES"
 		author = "_pusher_"
 		description = "RijnDael AES"
 		date = "2016-06"
@@ -979,8 +1054,9 @@ rule RijnDael_AES
 		$c0
 }
 
-rule RijnDael_AES_CHAR
-{	meta:
+rule RijnDael_AES_CHAR {
+	meta:
+		name = "RijnDael_AES_CHAR"
 		author = "_pusher_"
 		description = "RijnDael AES (check2) [char]"
 		date = "2016-06"
@@ -990,8 +1066,9 @@ rule RijnDael_AES_CHAR
 		$c0
 }
 
-rule RijnDael_AES_CHAR_inv
-{	meta:
+rule RijnDael_AES_CHAR_inv {
+	meta:
+		name = "RijnDael_AES_CHAR_inv"
 		author = "_pusher_"
 		description = "RijnDael AES S-inv [char]"
 		//needs improvement
@@ -1002,19 +1079,9 @@ rule RijnDael_AES_CHAR_inv
 		$c0
 }
 
-rule RijnDael_AES_LONG
-{	meta:
-		author = "_pusher_"
-		description = "RijnDael AES"
-		date = "2016-06"
-	strings:
-		$c0 = { 63 7C 77 7B F2 6B 6F C5 30 01 67 2B FE D7 AB 76 CA 82 C9 7D FA 59 47 F0 AD D4 A2 AF 9C A4 72 C0 }
-	condition:
-		$c0
-}
-
-rule RsaRef2_NN_modExp
-{	meta:
+rule RsaRef2_NN_modExp {
+	meta:
+		name = "RsaRef2_NN_modExp"
 		author = "Maxx"
 		description = "RsaRef2 NN_modExp"
 	strings:
@@ -1023,8 +1090,9 @@ rule RsaRef2_NN_modExp
 		any of them
 }
 
-rule RsaRef2_NN_modInv
-{	meta:
+rule RsaRef2_NN_modInv {
+	meta:
+		name = "RsaRef2_NN_modInv"
 		author = "Maxx"
 		description = "RsaRef2 NN_modInv"
 	strings:
@@ -1033,8 +1101,9 @@ rule RsaRef2_NN_modInv
 		$c0
 }
 
-rule RsaRef2_NN_modMult
-{	meta:
+rule RsaRef2_NN_modMult {
+	meta:
+		name = "RsaRef2_NN_modMult"
 		author = "Maxx"
 		description = "RsaRef2 NN_modMult"
 	strings:
@@ -1043,8 +1112,9 @@ rule RsaRef2_NN_modMult
 		$c0
 }
 
-rule RsaRef2_RsaPrivateDecrypt
-{	meta:
+rule RsaRef2_RsaPrivateDecrypt {
+	meta:
+		name = "RsaRef2_RsaPrivateDecrypt"
 		author = "Maxx"
 		description = "RsaRef2 RsaPrivateDecrypt"
 	strings:
@@ -1053,8 +1123,9 @@ rule RsaRef2_RsaPrivateDecrypt
 		$c0
 }
 
-rule RsaRef2_RsaPrivateEncrypt
-{	meta:
+rule RsaRef2_RsaPrivateEncrypt {
+	meta:
+		name = "RsaRef2_RsaPrivateEncrypt"
 		author = "Maxx"
 		description = "RsaRef2 RsaPrivateEncrypt"
 	strings:
@@ -1063,8 +1134,9 @@ rule RsaRef2_RsaPrivateEncrypt
 		$c0
 }
 
-rule RsaRef2_RsaPublicDecrypt
-{	meta:
+rule RsaRef2_RsaPublicDecrypt {
+	meta:
+		name = "RsaRef2_RsaPublicDecrypt"
 		author = "Maxx"
 		description = "RsaRef2 RsaPublicDecrypt"
 	strings:
@@ -1073,8 +1145,9 @@ rule RsaRef2_RsaPublicDecrypt
 		$c0
 }
 
-rule RsaRef2_RsaPublicEncrypt
-{	meta:
+rule RsaRef2_RsaPublicEncrypt {
+	meta:
+		name = "RsaRef2_RsaPublicEncrypt"
 		author = "Maxx"
 		description = "RsaRef2 RsaPublicEncrypt"
 	strings:
@@ -1083,8 +1156,9 @@ rule RsaRef2_RsaPublicEncrypt
 		$c0
 }
 
-rule RsaEuro_NN_modInv
-{	meta:
+rule RsaEuro_NN_modInv {
+	meta:
+		name = "RsaEuro_NN_modInv"
 		author = "Maxx"
 		description = "RsaEuro NN_modInv"
 	strings:
@@ -1093,8 +1167,9 @@ rule RsaEuro_NN_modInv
 		$c0
 }
 
-rule RsaEuro_NN_modMult
-{	meta:
+rule RsaEuro_NN_modMult {
+	meta:
+		name = "RsaEuro_NN_modMult"
 		author = "Maxx"
 		description = "RsaEuro NN_modMult"
 	strings:
@@ -1103,8 +1178,9 @@ rule RsaEuro_NN_modMult
 		$c0
 }
 
-rule Miracl_Big_constructor
-{	meta:
+rule Miracl_Big_constructor {
+	meta:
+		name = "Miracl_Big_constructor"
 		author = "Maxx"
 		description = "Miracl Big constructor"
 	strings:
@@ -1113,8 +1189,9 @@ rule Miracl_Big_constructor
 		$c0
 }
 
-rule Miracl_mirvar
-{	meta:
+rule Miracl_mirvar {
+	meta:
+		name = "Miracl_mirvar"
 		author = "Maxx"
 		description = "Miracl mirvar"
 	strings:
@@ -1125,8 +1202,9 @@ rule Miracl_mirvar
 		any of them
 }
 
-rule Miracl_mirsys_init
-{	meta:
+rule Miracl_mirsys_init {
+	meta:
+		name = "Miracl_mirsys_init"
 		author = "Maxx"
 		description = "Miracl mirsys init"
 	strings:
@@ -1136,8 +1214,9 @@ rule Miracl_mirsys_init
 }
 
 /* //gives many false positives sorry Storm Shadow
-rule x509_public_key_infrastructure_cert
-{	meta:
+rule x509_public_key_infrastructure_cert {
+	meta:
+		name = "x509_public_key_infrastructure_cert"
 		desc = "X.509 PKI Certificate"
 		ext = "crt"
 	strings:
@@ -1146,8 +1225,9 @@ rule x509_public_key_infrastructure_cert
 		$c0
 }
 
-rule pkcs8_private_key_information_syntax_standard
-{	meta:
+rule pkcs8_private_key_information_syntax_standard {
+	meta:
+		name = "pkcs8_private_key_information_syntax_standard"
 		desc = "Found PKCS #8: Private-Key"
 		ext = "key"
 	strings: 
@@ -1159,6 +1239,7 @@ rule pkcs8_private_key_information_syntax_standard
 
 rule BASE64_table {
 	meta:
+		name = "BASE64_table"
 		author = "_pusher_"
 		description = "Look for Base64 table"
 		date = "2015-07"
@@ -1171,6 +1252,7 @@ rule BASE64_table {
 
 rule Delphi_Random {
 	meta:
+		name = "Delphi_Random"
 		author = "_pusher_"
 		description = "Look for Random function"
 		date = "2015-08"
@@ -1185,6 +1267,7 @@ rule Delphi_Random {
 
 rule Delphi_RandomRange {
 	meta:
+		name = "Delphi_RandomRange"
 		author = "_pusher_"
 		description = "Look for RandomRange function"
 		date = "2016-06"
@@ -1197,6 +1280,7 @@ rule Delphi_RandomRange {
 
 rule Delphi_FormShow {
 	meta:
+		name = "Delphi_FormShow"
 		author = "_pusher_"
 		description = "Look for Form.Show function"
 		date = "2016-06"
@@ -1211,6 +1295,7 @@ rule Delphi_FormShow {
 
 rule Delphi_CompareCall {
 	meta:
+		name = "Delphi_CompareCall"
 		author = "_pusher_"
 		description = "Look for Compare string function"
 		date = "2016-07"
@@ -1226,6 +1311,7 @@ rule Delphi_CompareCall {
 
 rule Delphi_Copy {
 	meta:
+		name = "Delphi_Copy"
 		author = "_pusher_"
 		description = "Look for Copy function"
 		date = "2016-06"
@@ -1240,6 +1326,7 @@ rule Delphi_Copy {
 
 rule Delphi_IntToStr {
 	meta:
+		name = "Delphi_IntToStr"
 		author = "_pusher_"
 		description = "Look for IntToStr function"
 		date = "2016-04"
@@ -1255,6 +1342,7 @@ rule Delphi_IntToStr {
 
 rule Delphi_StrToInt {
 	meta:
+		name = "Delphi_StrToInt"
 		author = "_pusher_"
 		description = "Look for StrToInt function"
 		date = "2016-06"
@@ -1269,6 +1357,7 @@ rule Delphi_StrToInt {
 
 rule Delphi_DecodeDate {
 	meta:
+		name = "Delphi_DecodeDate"
 		author = "_pusher_"
 		description = "Look for DecodeDate (DecodeDateFully) function"
 		date = "2016-06"
@@ -1284,6 +1373,7 @@ rule Delphi_DecodeDate {
 
 rule Unknown_Random {
 	meta:
+		name = "Unknown_Random"
 		author = "_pusher_"
 		description = "Look for Random function"
 		date = "2016-07"
@@ -1295,6 +1385,7 @@ rule Unknown_Random {
 
 rule VC6_Random {
 	meta:
+		name = "VC6_Random"
 		author = "_pusher_"
 		description = "Look for Random function"
 		date = "2016-02"
@@ -1306,6 +1397,7 @@ rule VC6_Random {
 
 rule VC8_Random {
 	meta:
+		name = "VC8_Random"
 		author = "_pusher_"
 		description = "Look for Random function"
 		date = "2016-01"
@@ -1318,6 +1410,7 @@ rule VC8_Random {
 
 rule DCP_RIJNDAEL_Init {
 	meta:
+		name = "DCP_RIJNDAEL_Init"
 		author = "_pusher_"
 		description = "Look for DCP RijnDael Init"
 		date = "2016-07"
@@ -1329,6 +1422,7 @@ rule DCP_RIJNDAEL_Init {
 
 rule DCP_RIJNDAEL_EncryptECB {
 	meta:
+		name = "DCP_RIJNDAEL_EncryptECB"
 		author = "_pusher_"
 		description = "Look for DCP RijnDael EncryptECB"
 		date = "2016-07"
@@ -1340,6 +1434,7 @@ rule DCP_RIJNDAEL_EncryptECB {
 
 rule DCP_BLOWFISH_Init {
 	meta:
+		name = "DCP_BLOWFISH_Init"
 		author = "_pusher_"
 		description = "Look for DCP Blowfish Init"
 		date = "2016-07"
@@ -1352,6 +1447,7 @@ rule DCP_BLOWFISH_Init {
 
 rule DCP_BLOWFISH_EncryptCBC {
 	meta:
+		name = "DCP_BLOWFISH_EncryptCBC"
 		author = "_pusher_"
 		description = "Look for DCP Blowfish EncryptCBC"
 		date = "2016-07"
@@ -1363,6 +1459,7 @@ rule DCP_BLOWFISH_EncryptCBC {
 
 rule DCP_DES_Init {
 	meta:
+		name = "DCP_DES_Init"
 		author = "_pusher_"
 		description = "Look for DCP Des Init"
 		date = "2016-02"
@@ -1376,6 +1473,7 @@ rule DCP_DES_Init {
 
 rule DCP_DES_EncryptECB {
 	meta:
+		name = "DCP_DES_EncryptECB"
 		author = "_pusher_"
 		description = "Look for DCP Des EncryptECB"
 		date = "2016-02"
@@ -1387,6 +1485,7 @@ rule DCP_DES_EncryptECB {
 
 rule TEA_DELTA2 {
 	meta:
+		name = "TEA_DELTA2"
 		author = "_pusher_"
 		description = "TEA DELTA"
 		date = "2016-02"
@@ -1399,6 +1498,7 @@ rule TEA_DELTA2 {
 
 rule TEA_DELTA {
 	meta:
+		name = "TEA_DELTA"
 		author = "_pusher_"
 		description = "TEA DELTA"
 		date = "2016-02"
@@ -1411,6 +1511,7 @@ rule TEA_DELTA {
 
 rule TEA_SUM {
 	meta:
+		name = "TEA_SUM"
 		author = "_pusher_"
 		description = "TEA SUM"
 		date = "2016-02"
