@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
+import re
 import sys
 from pathlib import Path
 from docopt import docopt
 
 from crylib import *
-from crylib.constants import constants
+from crylib.constants.CryptoConstants import constants as CryptoConstants
+from crylib.constants.CryptoAPI import constants as CryptoAPIConstants
 
-__doc__ = f"""Usage: cryfind [-s SOURCES] [-m METHODS] [-a] <filename>
+__doc__ = f"""Usage: cryfind [-s SOURCES] [-m METHODS] [-c CONSTANTS] [-aexy] <filename>
 
 -h --help           Show this screen
--s SOURCES          Sources to be searched, could be : plain, stackstrings [default: plain]
--m METHODS          Methods to be used, could be : string, xor, yara, peimport [default: string,yara]
--a --all            Use all methods and sources
+-s SOURCES          Sources to be searched, could be : plain,stackstrings or all [default: plain]
+-m METHODS          Methods to be used, could be : string,yara,peimport or all [default: string]
+-c CONSTANTS        Constants to be used, only for -m string, could be : crypto,apiname or all [default: crypto]
+-a --all            Use all sources and methods and constants
+-e --encode         Try various encoding method on constants
+-x --xor            Bypass xor encryption with key length of one
+-y --summary        Only show summary
 """
 
 def banner():
@@ -24,26 +30,32 @@ def banner():
 ''')
 
 def header(source, method):
-    print('=' * 30)
     print(f'Source : {source}')
     print(f'Method : {method}')
-    print('=' * 30)
+    print('-' * 30)
     print()
 
-def show(results):
+def show_result(result):
+    print(f'[+] {hex(result["address"])}')
+    print(f'    - name : {result["name"]}')
+    if result.get('xor'):
+        print(f'    - xor  : 0x{result["xor"]:02x}')
+    if result.get('address_distribution'):
+        print(f'    - address distrubution : {", ".join(map(hex, sorted(result["address_distribution"])))}')
+    if result.get('size'):
+        print(f'    - size : { {4: "DWORD", 8: "QWORD"}[result["size"]] }')
+    if result.get('encode'):
+        print(f'    - encode : {result["encode"]}')
+
+def show_results(results):
     if len(results) > 0:
-        pad = len(f'{max([result["address"] for result in results]):x}')
-        pad = pad + pad % 2
         for result in sorted(results, key = lambda x : x['address']):
-            print(f'[+] 0x{result["address"]:0{pad}x}')
-            print(f'    - name : {result["name"]}')
-            if result.get("xor"):
-                print(f'    - xor  : 0x{result["xor"]:02x}')
+            show_result(result)
     else:
         print('[-] I found nothing')
     print()
 
-def show_pe_import(results):
+def show_results_pe_import(results):
     if len(results) > 0:
         for result in results:
             print(f'[+] {result["dll"]} - {result["function"]}')
@@ -51,44 +63,132 @@ def show_pe_import(results):
         print('[-] I found nothing')
     print()
 
+def show_summary(summarys, yara = False):
+    table, api = {}, 0
+    algos = set()
+    for results in summarys:
+        for result in results:
+            table[result['address']] = result
+    for _, result in sorted(table.items(), key = lambda x : x[1]['address']):
+        if 'Crypto API' not in result['name']:
+            if yara:
+                algos.add(result['name'].partition('_')[0])
+            else:
+                m = re.match(r'(.*) \[.*\]', result['name'])
+                if m:
+                    algos.add(m.group(1))
+                else:
+                    algos.add(result['name'])
+        else:
+            api += 1
+    
+    print(f"algorithms : {', '.join(algos)}")
+    print(f'number of matches: {len(table)}')
+    print(f'number of algorithms: {len(algos)}')
+    if api > 0:
+        print(f'number of crypto api: {api}')
+
+def show_summary_pe_import(summarys):
+    total, dlls = 0, set()
+
+    for results in summarys:
+        total += len(results)
+        for result in results:
+            dlls.add(result['dll'])
+            print(f'[+] {result["dll"]} - {result["function"]}')
+    
+    print(f'number of functions: {total}')
+    print(f'number of dlls: {len(dlls)}')
+
 def main():
     arguments = docopt(__doc__)
     filename = arguments['<filename>']
     sources = arguments['-s'].split(',')
     methods = arguments['-m'].split(',')
+    constantses = arguments['-c'].split(',')
+    encode = arguments['--encode']
+    xor = arguments['--xor']
+    summary = arguments['--summary']
     if arguments['--all']:
         sources = 'plain,stackstrings'.split(',')
-        methods = 'string,xor,yara,peimport'.split(',')
+        methods = 'string,yara,peimport'.split(',')
+        encode, xor = True, True
+    
+    for source in sources:
+        if source == 'all':
+            sources = 'plain,stackstrings'.split(',')
+            break
+        if source not in ['plain', 'stackstrings']:
+            raise ValueError(f'Unknown source name {source}')
+    for method in methods:
+        if method == 'all':
+            methods = 'string,yara,peimport'.split(',')
+            break
+        if method not in ['string', 'yara', 'peimport']:
+            raise ValueError(f'Unknown method name {method}')
+    
+    constants = []
+    for c in constantses:
+        if c == 'all':
+            constants = CryptoConstants + CryptoAPIConstants
+            break
+        constants += { 'crypto': CryptoConstants, 'apiname': CryptoAPIConstants }[c]
 
     banner()
 
-    with open(filename, 'rb') as f:
-        binary = f.read()
+    try:
+        with open(filename, 'rb') as f:
+            binary = f.read()
+    except FileNotFoundError:
+        print(f"\n[-] '{filename}' file not found")
+        exit()
 
     rules = []
     for rule in Path(__file__).parent.glob('rules/*'):
         with open(str(rule)) as f:
             rules.append(f.read())
 
+    summarys = []
+    summarys_yara = []
+    summarys_peimport = []
     for source in sources:
         if source == 'plain':
             data = binary
         elif source == 'stackstrings':
             data = stackstrings(binary)
-        else:
-            raise ValueError(f'Unknown method name {method}')
         for method in methods:
-            header(source, method)
+            if not summary:
+                header(source, method)
             if method == 'string':
-                show(find_const(data, constants))
-            elif method == 'xor':
-                show(find_const(data, constants, xor = True))
+                results = find_const(data, constants, encode = encode, xor = xor)
+                if not summary:
+                    show_results(results)
+                else:
+                    summarys.append(results)
             elif method == 'yara':
-                show(find_const_yara(data, rules))
+                results = find_const_yara(data, rules)
+                if not summary:
+                    show_results(results)
+                else:
+                    summarys_yara.append(results)
             elif method == 'peimport':
-                show_pe_import(pe_import(data))
-            else:
-                raise ValueError(f'Unknown source name {source}')
+                results = pe_import(data)
+                if not summary:
+                    show_results_pe_import(results)
+                else:
+                    summarys_peimport.append(results)
+    if not not summary:
+        print('Summary')
+        print('-' * 30)
+        show_summary(summarys)
+        if 'yara' in methods:
+            print('\n\nSummary of Yara')
+            print('-' * 30)
+            show_summary(summarys_yara, yara = True)
+        if 'peimport' in methods:
+            print('\n\nSummary of PE Import')
+            print('-' * 30)
+            show_summary_pe_import(summarys_peimport)
 
 if __name__ == '__main__':
     try:
