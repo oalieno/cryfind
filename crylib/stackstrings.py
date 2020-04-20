@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import io
 import json
 import r2pipe
 
@@ -24,7 +25,7 @@ def _stackstrings(r, blocks, block, path, discovered):
 
     data, leaf = b'', True
     for child in [jump, fail]:
-        if child and blocks[child] not in discovered:
+        if child and blocks.get(child) and blocks[child] not in discovered:
             data += _stackstrings(r, blocks, blocks[child], path + [block], discovered)
             leaf = False
     if leaf:
