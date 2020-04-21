@@ -18,7 +18,7 @@ Usage: cryfind [-s SOURCES] [-m METHODS] [-c CONSTANTS] [-aexy] <filename>
 -m METHODS          Methods to be used, could be : string,yara,peimport or all [default: string]
 -c CONSTANTS        Constants to be used, only for -m string, could be : crypto,apiname or all [default: crypto]
 -a --all            Use all sources and methods and constants
--e --encode         Try various encoding method on constants
+-e --encode         Try various encoding method on constants, including big, little endian and two's complement
 -x --xor            Bypass xor encryption with key length of one
 -y --summary        Only show summary
 ```
