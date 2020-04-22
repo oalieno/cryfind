@@ -112,6 +112,7 @@ def main():
     if arguments['--all']:
         sources = 'plain,stackstrings'.split(',')
         methods = 'string,yara,peimport'.split(',')
+        constantses = 'crypto,apiname'.split(',')
         encode, xor = True, True
     
     for source in sources:
