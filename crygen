@@ -2,7 +2,8 @@
 import random
 from docopt import docopt
 
-from crylib.constants import constants
+from crylib.constants.CryptoConstants import constants as CryptoConstants
+from crylib.constants.CryptoAPI import constants as CryptoAPIConstants
 
 __doc__ = f"""Usage: crygen [-p PREFIX]
 
@@ -17,8 +18,7 @@ def gen_yara(constants, prefix = 'cry'):
         rules += '    meta:\n'
         rules += f'        name = "{constant["name"]}"\n'
         rules += '    strings:\n'
-        for index, value in enumerate(constant["values"]):
-            rules += f'        $c{index} = {{ {" ".join(list(map(lambda x: hex(x)[2:].rjust(2, "0"), value)))} }}\n'
+        rules += f'        $c = {{ {" ".join(list(map(lambda x: hex(x)[2:].rjust(2, "0"), constant["values"])))} }}\n'
         rules += '    condition:\n'
         rules += f'        all of them\n'
         rules += '}\n\n'
@@ -27,6 +27,7 @@ def gen_yara(constants, prefix = 'cry'):
 def main():
     arguments = docopt(__doc__)
     prefix = arguments['-p']
+    constants = CryptoConstants + CryptoAPIConstants
     print(gen_yara(constants, prefix = prefix))
 
 if __name__ == '__main__':
