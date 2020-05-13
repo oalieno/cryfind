@@ -4,6 +4,8 @@ Search crypto signatures in binary
 
 ## Install
 
+Python >= 3
+
 ```
 python setup.py install
 ```

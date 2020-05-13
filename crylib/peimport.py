@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import lief
 from .constants.CryptoAPI import apinames
 

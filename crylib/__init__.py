@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from .findconst import find_const, find_const_yara
 from .stackstrings import stackstrings
 from .peimport import pe_import
