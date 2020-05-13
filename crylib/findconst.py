@@ -1,8 +1,9 @@
 import copy
-import yara
 import string
-from ahocorapy.keywordtree import KeywordTree
 from collections import defaultdict
+
+import yara
+from ahocorapy.keywordtree import KeywordTree
 
 class Node:
     def __init__(self, address, level):
@@ -48,7 +49,7 @@ def _merge(x, y):
     return x
 
 def _find_addresses(table, values):
-    lens = _lmap(lambda x : len(table[x]), values)
+    lens = _lmap(lambda x: len(table[x]), values)
     if not _unique(values):
         return []
     elif sum(lens) > 100:
@@ -97,7 +98,7 @@ def _xordiff(data):
         answer.append(data[i] ^ data[i+1])
     return bytes(answer)
 
-def _two_complement(value, bits, i_byteorder = 'big', o_byteorder = 'big'):
+def _two_complement(value, bits, i_byteorder='big', o_byteorder='big'):
     value = int.from_bytes(value, i_byteorder)
     if (value & (1 << (bits - 1))) != 0:
         value = value - (1 << bits)
@@ -109,8 +110,8 @@ def _cut(x, n):
         ans.append(x[i:i+n])
     return ans
 
-def find_const(binarys, constants, encode = False, xor = False):
-    if type(binarys) is bytes:
+def find_const(binarys, constants, encode=False, xor=False):
+    if isinstance(binarys, bytes):
         binarys = [binarys]
 
     binarys, binarys_bak = copy.deepcopy(binarys), binarys
@@ -140,7 +141,7 @@ def find_const(binarys, constants, encode = False, xor = False):
                 for e in ['big', 'little']:
                     constants_new.append({
                         'name': constant['name'],
-                        'values': _lmap(lambda x : x[::-1] if e == 'little' else x, values),
+                        'values': _lmap(lambda x: x[::-1] if e == 'little' else x, values),
                         'encode': f'{e} endian',
                         'size': len(values[0])
                     })
@@ -149,7 +150,7 @@ def find_const(binarys, constants, encode = False, xor = False):
                     for o in ['big', 'little']:
                         constants_new.append({
                             'name': constant['name'],
-                            'values': _lmap(lambda x : _two_complement(x, len(x) * 8, i, o), values),
+                            'values': _lmap(lambda x: _two_complement(x, len(x) * 8, i, o), values),
                             'encode': f"{i} endian -> two's complement -> {o} endian",
                             'size': len(values[0])
                         })
@@ -196,14 +197,14 @@ def find_const(binarys, constants, encode = False, xor = False):
     return results
 
 def find_const_yara(binarys, rules):
-    if type(binarys) is bytes:
+    if isinstance(binarys, bytes):
         binarys = [binarys]
 
     results = []
     for binary in binarys:
         for rule in rules:
-            y = yara.compile(source = rule)
-            matches = y.match(data = binary)
+            y = yara.compile(source=rule)
+            matches = y.match(data=binary)
             for match in matches:
                 _, address, meta = match.rule, match.strings[0][0], match.meta
                 results.append({'name': meta['name'], 'address': address})

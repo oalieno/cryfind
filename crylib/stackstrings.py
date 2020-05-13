@@ -58,7 +58,7 @@ def stackstrings(binary):
     with open(tmpfile, 'wb') as f:
         f.write(binary)
 
-    r = r2pipe.open(tmpfile, flags = ['-2'])
+    r = r2pipe.open(tmpfile, flags=['-2'])
     r.cmd('aaa')
     functions = r.cmdj('aflqj')
 

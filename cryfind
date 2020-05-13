@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import re
-import sys
 from pathlib import Path
 from docopt import docopt
 
@@ -48,28 +47,28 @@ def show_result(result):
         print(f'    - encode : {result["encode"]}')
 
 def show_results(results):
-    if len(results) > 0:
-        for result in sorted(results, key = lambda x : x['address']):
+    if results:
+        for result in sorted(results, key=lambda x: x['address']):
             show_result(result)
     else:
         print('[-] I found nothing')
     print()
 
 def show_results_pe_import(results):
-    if len(results) > 0:
+    if results:
         for result in results:
             print(f'[+] {result["dll"]} - {result["function"]}')
     else:
         print('[-] I found nothing')
     print()
 
-def show_summary(summarys, yara = False):
+def show_summary(summarys, yara=False):
     table, api = {}, 0
     algos = set()
     for results in summarys:
         for result in results:
             table[result['address']] = result
-    for _, result in sorted(table.items(), key = lambda x : x[1]['address']):
+    for _, result in sorted(table.items(), key=lambda x: x[1]['address']):
         if 'Crypto API' not in result['name']:
             if yara:
                 algos.add(result['name'].partition('_')[0])
@@ -133,7 +132,7 @@ def main():
         if c == 'all':
             constants = CryptoConstants + CryptoAPIConstants
             break
-        constants += { 'crypto': CryptoConstants, 'apiname': CryptoAPIConstants }[c]
+        constants += {'crypto': CryptoConstants, 'apiname': CryptoAPIConstants}[c]
 
     banner()
 
@@ -161,7 +160,7 @@ def main():
             if not summary:
                 header(source, method)
             if method == 'string':
-                results = find_const(data, constants, encode = encode, xor = xor)
+                results = find_const(data, constants, encode=encode, xor=xor)
                 if not summary:
                     show_results(results)
                 else:
@@ -178,14 +177,14 @@ def main():
                     show_results_pe_import(results)
                 else:
                     summarys_peimport.append(results)
-    if not not summary:
+    if summary:
         print('Summary')
         print('-' * 30)
         show_summary(summarys)
         if 'yara' in methods:
             print('\n\nSummary of Yara')
             print('-' * 30)
-            show_summary(summarys_yara, yara = True)
+            show_summary(summarys_yara, yara=True)
         if 'peimport' in methods:
             print('\n\nSummary of PE Import')
             print('-' * 30)

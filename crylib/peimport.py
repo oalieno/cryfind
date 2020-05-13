@@ -11,7 +11,7 @@ def _enum_import(pe):
 
 def pe_import(binary):
     try:
-        pe = lief.PE.parse(raw = list(binary))
+        pe = lief.PE.parse(raw=list(binary))
     except:
         return []
 

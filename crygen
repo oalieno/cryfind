@@ -11,7 +11,7 @@ __doc__ = f"""Usage: crygen [-p PREFIX]
 -p PREFIX           Prefix of the generated yara rule name [default: cry]
 """
 
-def gen_yara(constants, prefix = 'cry'):
+def gen_yara(constants, prefix='cry'):
     rules = ''
     for constant in constants:
         rules += f'rule {prefix}_{random.getrandbits(40)} {{\n'
@@ -28,7 +28,7 @@ def main():
     arguments = docopt(__doc__)
     prefix = arguments['-p']
     constants = CryptoConstants + CryptoAPIConstants
-    print(gen_yara(constants, prefix = prefix))
+    print(gen_yara(constants, prefix=prefix))
 
 if __name__ == '__main__':
     main()
