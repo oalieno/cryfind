@@ -1,9 +1,8 @@
-import io
 import json
 import r2pipe
 
 def thunked(blocks):
-    for addr, block in blocks.items():
+    for _, block in blocks.items():
         if block.get('jump') and blocks.get(block['jump']) is None:
             return True
     return False
@@ -58,11 +57,11 @@ def stackstrings(binary):
     tmpfile = '/tmp/cryfind-tmp'
     with open(tmpfile, 'wb') as f:
         f.write(binary)
-    
+
     r = r2pipe.open(tmpfile, flags = ['-2'])
     r.cmd('aaa')
     functions = r.cmdj('aflqj')
-    
+
     data = b''
     for function in functions:
         # get basic blocks table -> {0x01: block1, 0x06: block2, ...}

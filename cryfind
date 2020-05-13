@@ -81,7 +81,7 @@ def show_summary(summarys, yara = False):
                     algos.add(result['name'])
         else:
             api += 1
-    
+
     print(f"algorithms : {', '.join(algos)}")
     print(f'number of matches: {len(table)}')
     print(f'number of algorithms: {len(algos)}')
@@ -96,7 +96,7 @@ def show_summary_pe_import(summarys):
         for result in results:
             dlls.add(result['dll'])
             print(f'[+] {result["dll"]} - {result["function"]}')
-    
+
     print(f'number of functions: {total}')
     print(f'number of dlls: {len(dlls)}')
 
@@ -114,7 +114,7 @@ def main():
         methods = 'string,yara,peimport'.split(',')
         constantses = 'crypto,apiname'.split(',')
         encode, xor = True, True
-    
+
     for source in sources:
         if source == 'all':
             sources = 'plain,stackstrings'.split(',')
@@ -127,7 +127,7 @@ def main():
             break
         if method not in ['string', 'yara', 'peimport']:
             raise ValueError(f'Unknown method name {method}')
-    
+
     constants = []
     for c in constantses:
         if c == 'all':

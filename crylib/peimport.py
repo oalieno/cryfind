@@ -14,11 +14,11 @@ def pe_import(binary):
         pe = lief.PE.parse(raw = list(binary))
     except:
         return []
-    
+
     results = []
     for dllname, function in _enum_import(pe):
         for names in apinames.values():
             if function in names:
                 results.append({'dll': dllname, 'function': function})
-    
+
     return results

@@ -205,7 +205,7 @@ constants += [
     {
         'name': 'HAVAL [2 pass]',
         'values': b'''\x88j?$\xd3\x08\xa3\x85.\x8a\x19\x13Dsp\x03"8\t\xa4\xd01\x9f)\x98\xfa.\x08'''
-    }, 
+    },
     {
         'name': 'HAVAL [3 pass]',
         'values': b'''\x11\x14\xee\xb3*\xbcoc''\xc5\xa9+\xf61\x18t\x16>\\\xce\x1e\x93\x87\x9b3\xba\xd6\xaf\\\xcf$l'''

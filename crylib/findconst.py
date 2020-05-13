@@ -112,13 +112,13 @@ def _cut(x, n):
 def find_const(binarys, constants, encode = False, xor = False):
     if type(binarys) is bytes:
         binarys = [binarys]
-    
+
     binarys, binarys_bak = copy.deepcopy(binarys), binarys
 
     constants_new = []
     for constant in constants:
         v = constant['values']
-            
+
         constants_new.append({
             'name': constant['name'],
             'values': [v]
@@ -129,7 +129,7 @@ def find_const(binarys, constants, encode = False, xor = False):
                 continue
             if all(map(lambda x: chr(x) in string.printable, v)):
                 continue
-            
+
             valueses = []
             if len(v) % 4 == 0:
                 valueses.append(_cut(v, 4))
@@ -198,7 +198,7 @@ def find_const(binarys, constants, encode = False, xor = False):
 def find_const_yara(binarys, rules):
     if type(binarys) is bytes:
         binarys = [binarys]
-    
+
     results = []
     for binary in binarys:
         for rule in rules:
@@ -207,5 +207,5 @@ def find_const_yara(binarys, rules):
             for match in matches:
                 _, address, meta = match.rule, match.strings[0][0], match.meta
                 results.append({'name': meta['name'], 'address': address})
-    
+
     return results
