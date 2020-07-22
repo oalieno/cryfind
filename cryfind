@@ -46,12 +46,20 @@ def main():
             print(f'[+] {result["name"]}')
         else:
             print(f'[+] {result["name"]} founded in {result["size"]} size')
-            wide = any([value['encoding'] == 'little' for value in result['values']])
+            # preview max width
+            index_width, encoding_width = 0, 0
             for value in result['values']:
-                space = ' ' * [0, 3][wide and value['encoding'] == 'big']
-                xor = f' (⊕ 0x{value["xor"]})' if value.get('xor') else ''
-                # TODO: better format alignment
-                print(f'    | [{value["index"]}] {value["value"].hex()} ({value["encoding"]}){xor}{space} : {", ".join([hex(x) for x in value["addresses"]])}')
+                index_width = max(index_width, len(str(value['index'])))
+                encoding_width = max(encoding_width, len(value['encoding']))
+            for value in result['values']:
+                print('    | [{index}] {value} ({encoding}){xor}{space} : {addresses}'.format(
+                    index=str(value['index']).rjust(index_width, ' '),
+                    value=value['value'].hex(),
+                    encoding=value['encoding'],
+                    xor=f' (⊕ 0x{value["xor"]})' if value.get('xor') else '',
+                    space='' * (encoding_width - len(value['encoding'])),
+                    addresses=', '.join([hex(x) for x in value['addresses']])
+                ))
             print()
 
 if __name__ == '__main__':
