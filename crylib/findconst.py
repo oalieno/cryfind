@@ -200,7 +200,7 @@ def find_const(binary, constants, auto_group = True):
         results += _search_yara(binary, constants, size)
     for xor_size in range(1, 3):
         results += _search_yara_xor(binary, constants, size, xor_size)
-    if not auto_group:
+    if auto_group:
         _results = []
         for result in results:
             grouped_results = _auto_group(result)
