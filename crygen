@@ -2,33 +2,22 @@
 import random
 from docopt import docopt
 
+from crylib.findconst import _constants_to_rules
 from crylib.constants.CryptoConstants import constants as CryptoConstants
 from crylib.constants.CryptoAPI import constants as CryptoAPIConstants
 
 __doc__ = f"""Usage: crygen [-p PREFIX]
 
 -h --help           Show this screen
--p PREFIX           Prefix of the generated yara rule name [default: cry]
 """
-
-def gen_yara(constants, prefix='cry'):
-    rules = ''
-    for constant in constants:
-        rules += f'rule {prefix}_{random.getrandbits(40)} {{\n'
-        rules += '    meta:\n'
-        rules += f'        name = "{constant["name"]}"\n'
-        rules += '    strings:\n'
-        rules += f'        $c = {{ {" ".join(list(map(lambda x: hex(x)[2:].rjust(2, "0"), constant["values"])))} }}\n'
-        rules += '    condition:\n'
-        rules += f'        all of them\n'
-        rules += '}\n\n'
-    return rules
 
 def main():
     arguments = docopt(__doc__)
-    prefix = arguments['-p']
-    constants = CryptoConstants + CryptoAPIConstants
-    print(gen_yara(constants, prefix=prefix))
+    constants = CryptoConstants
+    rules = ''
+    for size in ['fullword', 'dword', 'qword']:
+        rules += _constants_to_rules(constants, size)
+    print(rules)
 
 if __name__ == '__main__':
     main()
