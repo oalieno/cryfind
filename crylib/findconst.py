@@ -1,8 +1,7 @@
-import yara
-import copy
 import struct
-from collections import defaultdict, deque
-        
+from collections import defaultdict
+import yara
+
 SIZE_STRING_INT = {
     'fullword': 0,
     'qword': 8,
@@ -35,7 +34,7 @@ class Result:
 
 class Match:
     def __init__(self, match=None):
-        self.values = { 0: [], 8: [], 4: [] }
+        self.values = {0: [], 8: [], 4: []}
         self.add(match)
     def add(self, match):
         if match:
@@ -68,7 +67,7 @@ def _id_unique(values):
 def _xor(a, b):
     return bytes([x ^ y for x, y in zip(a, b)])
 
-def _xor_difference(data, size = 1):
+def _xor_difference(data, size=1):
     ans = int.from_bytes(data[:-size], 'big') ^ int.from_bytes(data[size:], 'big')
     return ans.to_bytes(len(data) - size, 'big')
 
@@ -98,7 +97,7 @@ def _constant_to_rule(constant, sizes=['fullword'], _ctr=[0]):
         length = {len(constant['value'])}
     strings:
 '''
-   
+
     conditions = []
     for size in sizes:
         size = SIZE_STRING_INT[size]
@@ -112,7 +111,7 @@ def _constant_to_rule(constant, sizes=['fullword'], _ctr=[0]):
 
     if not conditions:
         return ''
-    
+
     rules += '    condition:\n'
     rules += '        ' + ' or '.join(conditions) + '\n'
     rules += '}\n'
@@ -145,7 +144,6 @@ def _search_yara_xor(matches, binary, constants, xor_size=1):
     _search_yara(_matches, _binary, _constants, size=['fullword'])
 
     for _id, _match in _matches.items():
-        values = []
         for _value in _match.values[0]:
             ori = constants[_id]['value']
             if _value.encoding == 'little':
@@ -168,11 +166,11 @@ def _auto_group(match):
 
     for size in [8, 4]:
         values = match.values[size]
-        values = sorted(values, key = lambda x: x.address)
+        values = sorted(values, key=lambda x: x.address)
 
         while values:
             # get the smallest distance group
-            L, H, ans = 0, values[-1].address - values[0].address, None
+            L, H, ans = 0, values[-1].address - values[0].address, tuple()
             while L < H or (L == H and (not ans or values[ans[1]].address - values[ans[0]].address != L)):
                 M = (L + H) >> 1
                 slots = [0] * (match.length // size)
@@ -191,7 +189,7 @@ def _auto_group(match):
 
             # remove the selected group out of current values
             if ans:
-                new_values, dels = [None] * (match.length // size), []
+                new_values = [None] * (match.length // size)
                 for i in range(ans[1], ans[0] - 1, -1):
                     if not new_values[values[i].index]:
                         new_values[values[i].index] = values[i]
@@ -204,7 +202,7 @@ def _auto_group(match):
 
     if not result.groups:
         return None
-        
+
     return result
 
 def _remove_duplicate(result):
@@ -227,7 +225,7 @@ def _auto_groups(matches):
             results.append(result)
     return results
 
-def find_const(binary, constants, auto_group = True):
+def find_const(binary, constants):
     matches = defaultdict(Match)
     _search_yara(matches, binary, constants, ['fullword', 'dword', 'qword'])
     for xor_size in range(1, 3):
