@@ -1,0 +1,21 @@
+image: "python:3.7" 
+
+before_script:
+  - python --version
+  - pip install pylint
+  - pip install pytest
+  - pip install -r requirements.txt
+
+stages:
+  - Static Analysis
+  - Test
+
+pylint:
+  stage: Static Analysis
+  script:
+  - pylint -d C0301,C0111,C0103,C0330,I1101,R0903,R1702,R0912,R0915,W0702,W0703,W0102 crylib/*.py cryfind crygen
+
+pytest:
+    stage: Test
+    script:
+    - cd test/ && pytest -v
