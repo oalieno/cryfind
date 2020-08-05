@@ -30,16 +30,16 @@ def main():
     summary = arguments['--summary']
 
     banner()
-    
+
     try:
         with open(filename, 'rb') as f:
             binary = f.read()
     except FileNotFoundError:
         print(f"\n[-] '{filename}' file not found")
         exit()
-    
+
     print('[+] Searching For Crypto Constants...')
-    results = find_const(binary, constants)
+    results = find_const(binary, constants, summary)
     for result in results:
         print(f'[+] {result.name}')
         if not summary:

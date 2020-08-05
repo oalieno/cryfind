@@ -1,7 +1,7 @@
 import struct
 from collections import defaultdict
 import yara
-from .base import Value, Group, Result, Match
+from .base import Group, Result, Match
 
 def _cut(x, n):
     if n == 0:
@@ -188,10 +188,13 @@ def _auto_groups(matches):
             results.append(result)
     return results
 
-def find_const(binary, constants):
+def find_const(binary, constants, summary=False):
     matches = defaultdict(Match)
     _search_yara(matches, binary, constants, ['fullword', 'dword', 'qword'])
     for xor_size in range(1, 3):
         _search_yara_xor(matches, binary, constants, xor_size)
-    results = _auto_groups(matches)
+    if summary:
+        results = [Result(match.name) for match in matches.values()]
+    else:
+        results = _auto_groups(matches)
     return results
