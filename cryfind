@@ -2,8 +2,8 @@
 from docopt import docopt
 
 from crylib import *
-from crylib.constants.CryptoConstants import constants as CryptoConstants
-from crylib.constants.CryptoAPI import constants as CryptoAPIConstants
+from crylib.constants.CryptoConstants import constants
+from crylib.constants.CryptoAPI import apinames
 
 __doc__ = f"""Usage: cryfind [-s SOURCES] [-m METHODS] [-c CONSTANTS] [-aexy] <filename>
 
@@ -38,7 +38,7 @@ def main():
         print(f"\n[-] '{filename}' file not found")
         exit()
     
-    constants = CryptoConstants
+    print('[+] Searching For Crypto Constants...')
     results = find_const(binary, constants)
     for result in results:
         print(f'[+] {result.name}')
@@ -47,6 +47,20 @@ def main():
                 print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
                 for value in group.values:
                     print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
+        print()
+    if not results:
+        print('[-] Nothing Found')
+
+    print('[+] Searching For Crypto API Names...')
+    results = find_api(binary, apinames)
+    for result in results:
+        print(f'[+] DLL - {result.name}')
+        for group in result.groups:
+            for value in group.values:
+                print(f'    | {value.value.decode()}: 0x{value.address:x}')
+        print()
+    if not results:
+        print('[-] Nothing Found')
 
 if __name__ == '__main__':
     try:
