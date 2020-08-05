@@ -14,10 +14,7 @@ __doc__ = f"""Usage: crygen [-p PREFIX]
 def main():
     arguments = docopt(__doc__)
     constants = CryptoConstants
-    rules = ''
-    for size in ['fullword', 'dword', 'qword']:
-        rules += _constants_to_rules(constants, size)
-    print(rules)
+    print(_constants_to_rules(constants, ['fullword', 'dword', 'qword']))
 
 if __name__ == '__main__':
     main()

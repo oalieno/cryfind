@@ -42,25 +42,30 @@ def main():
     results = find_const(binary, constants)
     # TODO: if fullword founded, ignore dword, qword
     for result in results:
-        if summary:
-            print(f'[+] {result["name"]}')
-        else:
-            print(f'[+] {result["name"]} founded in {result["size"]} size')
+        print(f'[+] {result.name}')
+        if not summary:
+            for group in result.groups:
+                print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
+                for value in group.values:
+                    print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
+            '''
             # preview max width
             index_width, encoding_width = 0, 0
-            for value in result['values']:
-                index_width = max(index_width, len(str(value['index'])))
-                encoding_width = max(encoding_width, len(value['encoding']))
-            for value in result['values']:
+            for value in result.values:
+                index_width = max(index_width, len(str(value.index)))
+                encoding_width = max(encoding_width, len(value.encoding))
+            for value in result.values:
                 print('    | [{index}] {value} ({encoding}){xor}{space} : {addresses}'.format(
-                    index=str(value['index']).rjust(index_width, ' '),
-                    value=value['value'].hex(),
-                    encoding=value['encoding'],
-                    xor=f' (⊕ 0x{value["xor"]})' if value.get('xor') else '',
-                    space='' * (encoding_width - len(value['encoding'])),
-                    addresses=', '.join([hex(x) for x in value['addresses']])
+                    index=str(value.index).rjust(index_width, ' '),
+                    value=value.value.hex(),
+                    encoding=value.encoding,
+                    #xor=f' (⊕ 0x{value["xor"]})' if value.get('xor') else '',
+                    xor='',
+                    space='' * (encoding_width - len(value.encoding)),
+                    addresses=', '.join([hex(x) for x in [value.address]])
                 ))
             print()
+            '''
 
 if __name__ == '__main__':
     try:
