@@ -43,12 +43,7 @@ def main():
             print('\n[+] Searching For Crypto Constants...')
             results = find_const(binary, constants, summary)
             for result in results:
-                print(f'[+] {result.name}')
-                if not summary:
-                    for group in result.groups:
-                        print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
-                        for value in group.values:
-                            print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
+                print(result.str(summary))
             if not results:
                 print('[-] Nothing Found')
         elif method == 'stackstrings':
@@ -56,26 +51,20 @@ def main():
             data = stackstrings(binary)
             results = find_const(data, constants, summary)
             for result in results:
-                print(f'[+] {result.name}')
-                if not summary:
-                    for group in result.groups:
-                        print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
-                        for value in group.values:
-                            print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
+                print(result.str(summary))
             if not results:
                 print('[-] Nothing Found')
         elif method == 'api':
             print('\n[+] Searching For Crypto API Names...')
             results = find_api(binary, apinames)
             for result in results:
-                print(f'[+] DLL - {result.name}')
+                print(f'[+] DLL - {result["name"]}')
                 if not summary:
-                    for group in result.groups:
-                        for value in group.values:
-                            print(f'    | {value.value.decode()}: 0x{value.address:x}')
+                    for function in result['functions']:
+                        print(f'    | {function["name"].decode()}: 0x{function["address"]:x}')
             if not results:
                 print('[-] Nothing Found')
-        elif method == 'pemiport':
+        elif method == 'peimport':
             print('\n[+] Searching For Crypto API in PE Import Tables...')
             try:
                 results = pe_import(binary)

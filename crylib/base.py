@@ -1,5 +1,5 @@
 class Value:
-    def __init__(self, value, address, index, encoding):
+    def __init__(self, value, address, index, encoding, xor=b''):
         self.value = value
         self.address = address
         self.index = int(index)
@@ -11,6 +11,7 @@ class Value:
             'lnb',    # little endian -> negative -> big endian
             'lnl',    # little endian -> negative -> little endian
         ][int(encoding)]
+        self.xor = xor
 
 class Group:
     def __init__(self, blocksize, values):
@@ -21,6 +22,18 @@ class Result:
     def __init__(self, name):
         self.name = name
         self.groups = []
+    def str(self, summary=False):
+        output = ''
+        output += f'[+] {self.name}\n'
+        if not summary:
+            for group in self.groups:
+                output += '    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize] + '\n'
+                for value in group.values:
+                    output += f'        | [{value.index}] {value.value.hex()} ({value.encoding})'
+                    if value.xor:
+                        output += f' (⊕ 0x{value.xor.hex()})'
+                    output += f': 0x{value.address:x}\n'
+        return output.strip('\n')
 
 class Match:
     def __init__(self, match=None):

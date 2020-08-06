@@ -1,5 +1,4 @@
 import yara
-from .base import Result, Value, Group
 
 def _apiname_to_rule(dllname, funcnames, _ctr=[0]):
     _ctr[0] += 1
@@ -31,10 +30,8 @@ def find_api(binary, apinames):
     rules = _apinames_to_rules(apinames)
     results = []
     for match in yara.compile(source=rules).match(data=binary):
-        result = Result(match.meta['name'])
-        values = []
+        result = {'name': match.meta['name'], 'functions': []}
         for address, _, value in match.strings:
-            values.append(Value(value, address, 0, 0))
-        result.groups.append(Group(0, values))
+            result['functions'].append({'name': value, 'address': address})
         results.append(result)
     return results

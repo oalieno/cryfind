@@ -117,6 +117,8 @@ def _search_yara_xor(matches, binary, constants, xor_size=1):
             key = list(set(_cut(key, xor_size)))
             if len(key) == 1 and int.from_bytes(key[0], 'big') != 0:
                 _value.value = ori
+                _value.xor = key[0]
+                matches[_id].name = _match.name
                 matches[_id].values[0].append(_value)
 
 def _distance(values):
@@ -135,7 +137,7 @@ def _auto_group(match):
 
         while values:
             # get the smallest distance group
-            L, H, ans = 0, values[-1].address - values[0].address, tuple()
+            L, H, ans = 0, 0x1000, tuple()
             while L < H or (L == H and (not ans or values[ans[1]].address - values[ans[0]].address != L)):
                 M = (L + H) >> 1
                 slots = [0] * (match.length // size)
@@ -159,9 +161,7 @@ def _auto_group(match):
                     if not new_values[values[i].index]:
                         new_values[values[i].index] = values[i]
                         del values[i]
-                # assume constants group won't be larger than 0x1000
-                if _distance(new_values) <= 0x1000:
-                    result.groups.append(Group(size, new_values))
+                result.groups.append(Group(size, new_values))
             else:
                 break
 
