@@ -12,27 +12,32 @@ class Value:
             'lnl',    # little endian -> negative -> little endian
         ][int(encoding)]
         self.xor = xor
+    def __str__(self):
+        output = f'[{self.index}] {self.value.hex()} ({self.encoding})'
+        if self.xor:
+            output += f' (⊕ 0x{self.xor.hex()})'
+        output += f': 0x{self.address:x}'
+        return output
 
 class Group:
     def __init__(self, blocksize, values):
         self.blocksize = blocksize
         self.values = values
+    def __str__(self):
+        output = '- ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[self.blocksize] + '\n'
+        for value in self.values:
+            output += f'    | {value}\n'
+        return output.strip('\n')
 
 class Result:
     def __init__(self, name):
         self.name = name
         self.groups = []
-    def str(self, summary=False):
+    def __str__(self):
         output = ''
         output += f'[+] {self.name}\n'
-        if not summary:
-            for group in self.groups:
-                output += '    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize] + '\n'
-                for value in group.values:
-                    output += f'        | [{value.index}] {value.value.hex()} ({value.encoding})'
-                    if value.xor:
-                        output += f' (⊕ 0x{value.xor.hex()})'
-                    output += f': 0x{value.address:x}\n'
+        for group in self.groups:
+            output += '    ' + str(group).replace('\n', '\n    ') + '\n'
         return output.strip('\n')
 
 class Match:

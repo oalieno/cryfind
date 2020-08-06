@@ -54,6 +54,17 @@ def _stackstrings(r, blocks, block, path, discovered):
     return data
 
 def stackstrings(binary):
+    '''Dump the stack from emulation
+
+    Parameters
+    ----------
+    binary: bytes
+        Target binary.
+
+    Returns
+    -------
+    bytes
+    '''
     tmpfile = '/tmp/cryfind-tmp'
     with open(tmpfile, 'wb') as f:
         f.write(binary)

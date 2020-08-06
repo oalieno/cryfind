@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from docopt import docopt
 
-from crylib.findconst import _constants_to_rules
+from crylib import constants_to_rules
 from crylib.constants.CryptoConstants import constants
 
 __doc__ = f"""Usage: crygen [-e ENCODING]
@@ -15,7 +15,7 @@ def main():
     encoding = arguments['-e'].split(',')
     if arguments['-e'] == 'all':
         encoding = ['fullword', 'dword', 'qword']
-    print(_constants_to_rules(constants, encoding))
+    print(constants_to_rules(constants, encoding))
 
 if __name__ == '__main__':
     main()

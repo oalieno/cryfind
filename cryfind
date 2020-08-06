@@ -3,7 +3,7 @@ from docopt import docopt
 
 from crylib import find_const, find_api, pe_import, stackstrings
 from crylib.constants.CryptoConstants import constants
-from crylib.constants.CryptoAPI import apinames
+from crylib.constants.CryptoAPI import apis
 
 __doc__ = f"""Usage: cryfind [-m METHODS] [-y] <filename>
 
@@ -43,7 +43,7 @@ def main():
             print('\n[+] Searching For Crypto Constants...')
             results = find_const(binary, constants, summary)
             for result in results:
-                print(result.str(summary))
+                print(result)
             if not results:
                 print('[-] Nothing Found')
         elif method == 'stackstrings':
@@ -51,17 +51,17 @@ def main():
             data = stackstrings(binary)
             results = find_const(data, constants, summary)
             for result in results:
-                print(result.str(summary))
+                print(result)
             if not results:
                 print('[-] Nothing Found')
         elif method == 'api':
             print('\n[+] Searching For Crypto API Names...')
-            results = find_api(binary, apinames)
+            results = find_api(binary, apis)
             for result in results:
                 print(f'[+] DLL - {result["name"]}')
                 if not summary:
                     for function in result['functions']:
-                        print(f'    | {function["name"].decode()}: 0x{function["address"]:x}')
+                        print(f'    | {function["name"]}: 0x{function["address"]:x}')
             if not results:
                 print('[-] Nothing Found')
         elif method == 'peimport':
