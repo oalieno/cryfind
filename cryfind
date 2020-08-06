@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 from docopt import docopt
 
-from crylib import *
+from crylib import find_const, find_api, pe_import, stackstrings
 from crylib.constants.CryptoConstants import constants
 from crylib.constants.CryptoAPI import apinames
 
-__doc__ = f"""Usage: cryfind [-s SOURCES] [-m METHODS] [-c CONSTANTS] [-aexy] <filename>
+__doc__ = f"""Usage: cryfind [-m METHODS] [-y] <filename>
 
 -h --help           Show this screen
--s SOURCES          Sources to be searched, could be : plain,stackstrings or all [default: plain]
--m METHODS          Methods to be used, could be : string,yara,peimport or all [default: string]
--c CONSTANTS        Constants to be used, only for -m string, could be : crypto,apiname or all [default: crypto]
--a --all            Use all sources and methods and constants
+-m METHODS          Methods to be used, could be : constant,stackstrings,api,peimport or all [default: constant,api]
 -y --summary        Only show summary
 """
 
@@ -27,7 +24,10 @@ def banner():
 def main():
     arguments = docopt(__doc__)
     filename = arguments['<filename>']
+    methods = arguments['-m'].split(',')
     summary = arguments['--summary']
+    if arguments['-m'] == 'all':
+        methods = 'constant,stackstrings,api,peimport'.split(',')
 
     banner()
 
@@ -38,28 +38,55 @@ def main():
         print(f"\n[-] '{filename}' file not found")
         exit()
 
-    print('[+] Searching For Crypto Constants...')
-    results = find_const(binary, constants, summary)
-    for result in results:
-        print(f'[+] {result.name}')
-        if not summary:
-            for group in result.groups:
-                print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
-                for value in group.values:
-                    print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
-    if not results:
-        print('[-] Nothing Found')
-
-    print('[+] Searching For Crypto API Names...')
-    results = find_api(binary, apinames)
-    for result in results:
-        print(f'[+] DLL - {result.name}')
-        if not summary:
-            for group in result.groups:
-                for value in group.values:
-                    print(f'    | {value.value.decode()}: 0x{value.address:x}')
-    if not results:
-        print('[-] Nothing Found')
+    for method in methods:
+        if method == 'constant':
+            print('\n[+] Searching For Crypto Constants...')
+            results = find_const(binary, constants, summary)
+            for result in results:
+                print(f'[+] {result.name}')
+                if not summary:
+                    for group in result.groups:
+                        print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
+                        for value in group.values:
+                            print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
+            if not results:
+                print('[-] Nothing Found')
+        elif method == 'stackstrings':
+            print('\n[+] Searching For Crypto Constants in StackStrings... ( This might takes a while )')
+            data = stackstrings(binary)
+            results = find_const(data, constants, summary)
+            for result in results:
+                print(f'[+] {result.name}')
+                if not summary:
+                    for group in result.groups:
+                        print('    - ' + {0: 'fullword', 8: 'qword', 4: 'dword'}[group.blocksize])
+                        for value in group.values:
+                            print(f'        | [{value.index}] {value.value.hex()} ({value.encoding}): 0x{value.address:x}')
+            if not results:
+                print('[-] Nothing Found')
+        elif method == 'api':
+            print('\n[+] Searching For Crypto API Names...')
+            results = find_api(binary, apinames)
+            for result in results:
+                print(f'[+] DLL - {result.name}')
+                if not summary:
+                    for group in result.groups:
+                        for value in group.values:
+                            print(f'    | {value.value.decode()}: 0x{value.address:x}')
+            if not results:
+                print('[-] Nothing Found')
+        elif method == 'pemiport':
+            print('\n[+] Searching For Crypto API in PE Import Tables...')
+            try:
+                results = pe_import(binary)
+                for result in results:
+                    print(f'[+] {result["dll"]}: {result["function"]}')
+                if not results:
+                    print('[-] Nothing Found')
+            except Exception as e:
+                print(e)
+        else:
+            print(f'[?] Unknown Method {method}')
 
 if __name__ == '__main__':
     try:

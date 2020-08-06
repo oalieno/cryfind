@@ -12,8 +12,8 @@ def _enum_import(pe):
 def pe_import(binary):
     try:
         pe = lief.PE.parse(raw=list(binary))
-    except:
-        return []
+    except lief.bad_format:
+        raise Exception('[-] This is not PE binary')
 
     results = []
     for dllname, function in _enum_import(pe):

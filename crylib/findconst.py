@@ -94,6 +94,8 @@ def _search_yara(matches, binary, constants, size=['fullword']):
         matches[match.meta['id']].add(match)
 
 def _search_yara_xor(matches, binary, constants, xor_size=1):
+    if len(binary) < xor_size + 4:
+        return
     _binary = _xor_difference(binary, xor_size)
     _constants = []
     for constant in constants:
