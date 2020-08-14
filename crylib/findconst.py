@@ -30,6 +30,12 @@ def _xor_difference(data, size=1):
     ans = int.from_bytes(data[:-size], 'big') ^ int.from_bytes(data[size:], 'big')
     return ans.to_bytes(len(data) - size, 'big')
 
+def _is_repeat(data, size):
+    for i, _ in enumerate(data):
+        if data[i] != data[i % size]:
+            return False
+    return True
+
 def _values_to_rule_strings(values, size=0):
     rules = ''
     c_type = {4: 'i', 8: 'q'}.get(size, '')
@@ -72,10 +78,9 @@ def _search_yara_xor(matches, binary, constants, xor_size=1):
             if _value.encoding == 'little':
                 ori = ori[::-1]
             key = _xor(binary[_value.address:_value.address+len(_value.value)], ori)
-            key = list(set(_cut(key, xor_size)))
-            if len(key) == 1 and int.from_bytes(key[0], 'big') != 0:
+            if _is_repeat(key, xor_size) and int.from_bytes(key, 'big') != 0:
                 _value.value = ori
-                _value.xor = key[0]
+                _value.xor = key[:xor_size]
                 matches[_id].name = _match.name
                 matches[_id].values[0].append(_value)
 
@@ -218,7 +223,7 @@ def constants_to_rules(constants, sizes=['fullword']):
         rules += _constant_to_rule(constant, sizes)
     return rules
 
-def find_const(binary, constants, summary=False):
+def find_const(binary, constants, summary=False, xor_size_max=4):
     '''Find constants in binary
 
     Parameters
@@ -244,7 +249,7 @@ def find_const(binary, constants, summary=False):
     '''
     matches = defaultdict(Match)
     _search_yara(matches, binary, constants, ['fullword', 'dword', 'qword'])
-    for xor_size in range(1, 3):
+    for xor_size in range(1, xor_size_max+1):
         _search_yara_xor(matches, binary, constants, xor_size)
     if summary:
         results = [Result(match.name) for match in matches.values()]

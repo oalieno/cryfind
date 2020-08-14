@@ -2,13 +2,16 @@
 from docopt import docopt
 
 from crylib import find_const, find_api, pe_import, stackstrings
-from crylib.constants.CryptoConstants import constants
-from crylib.constants.CryptoAPI import apis
+from crylib.constants.CryptoConstants import constants as cryptoConstants
+from crylib.constants.CryptoAPI import apis as cryptoAPIs
 
-__doc__ = f"""Usage: cryfind [-m METHODS] [-y] <filename>
+__doc__ = f"""Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] [-y] <filename>
 
 -h --help           Show this screen
--m METHODS          Methods to be used, could be : constant,stackstrings,api,peimport or all [default: constant,api]
+-m METHODS          Methods to be used, could be : constant,api,peimport,stackstrings or all [default: constant,api]
+-s STRING           Specify custom string to search in ascii, conflict with -c, -C option
+-c CONSTANT         Specify custom constant to search in hex, conflict with -s, -C option
+-x LENGTH           Maximum xor key length to try [default: 4]
 -y --summary        Only show summary
 """
 
@@ -25,9 +28,22 @@ def main():
     arguments = docopt(__doc__)
     filename = arguments['<filename>']
     methods = arguments['-m'].split(',')
+    xor_size = int(arguments['-x'])
     summary = arguments['--summary']
     if arguments['-m'] == 'all':
         methods = 'constant,stackstrings,api,peimport'.split(',')
+
+    constants, apis = cryptoConstants, cryptoAPIs
+    if arguments['-s']:
+        constants = [{
+            'name': 'Custom',
+            'value': arguments['-s'].encode()
+        }]
+    elif arguments['-c']:
+        constants = [{
+            'name': 'Custom',
+            'value': bytes.fromhex(arguments['-c'])
+        }]
 
     banner()
 
@@ -41,7 +57,7 @@ def main():
     for method in methods:
         if method == 'constant':
             print('\n[+] Searching For Crypto Constants...')
-            results = find_const(binary, constants, summary)
+            results = find_const(binary, constants, summary, xor_size)
             for result in results:
                 print(result)
             if not results:

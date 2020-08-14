@@ -1,3 +1,5 @@
+import string
+
 class Value:
     def __init__(self, value, address, index, encoding, xor=b''):
         self.value = value
@@ -12,10 +14,17 @@ class Value:
             'lnl',    # little endian -> negative -> little endian
         ][int(encoding)]
         self.xor = xor
+    @staticmethod
+    def _printable_bytes(data):
+        printable_chars = set(string.printable.encode('ascii'))
+        return all(char in printable_chars for char in data)
     def __str__(self):
         output = f'[{self.index}] {self.value.hex()} ({self.encoding})'
         if self.xor:
-            output += f' (⊕ 0x{self.xor.hex()})'
+            if self._printable_bytes(self.xor):
+                output += f' (⊕ {self.xor.decode()})'
+            else:
+                output += f' (⊕ 0x{self.xor.hex()})'
         output += f': 0x{self.address:x}'
         return output
 
