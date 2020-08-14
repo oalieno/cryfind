@@ -17,8 +17,8 @@ Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] [-y] <filename
 
 -h --help           Show this screen
 -m METHODS          Methods to be used, could be : constant,api,peimport,stackstrings or all [default: constant,api]
--s STRING           Specify custom string to search in ascii, conflict with -c, -C option
--c CONSTANT         Specify custom constant to search in hex, conflict with -s, -C option
+-s STRING           Specify custom string to search in ascii, conflict with -c option
+-c CONSTANT         Specify custom constant to search in hex, conflict with -s option
 -x LENGTH           Maximum xor key length to try [default: 4]
 -y --summary        Only show summary
 ```
