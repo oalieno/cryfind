@@ -13,10 +13,13 @@ Cryfind is a tool to help you find crypto signatures in binary.
 ## Usage
 
 ```
-Usage: cryfind [-m METHODS] [-y] <filename>
+Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] [-y] <filename>
 
 -h --help           Show this screen
--m METHODS          Methods to be used, could be : constant,stackstrings,api,peimport or all [default: constant,api]
+-m METHODS          Methods to be used, could be : constant,api,peimport,stackstrings or all [default: constant,api]
+-s STRING           Specify custom string to search in ascii, conflict with -c, -C option
+-c CONSTANT         Specify custom constant to search in hex, conflict with -s, -C option
+-x LENGTH           Maximum xor key length to try [default: 4]
 -y --summary        Only show summary
 ```
 
