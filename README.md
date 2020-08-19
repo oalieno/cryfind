@@ -1,4 +1,3 @@
-
 <div id="mybrand" align="center">
     <img src="https://i.imgur.com/s50m6R0.png" height="200">
     <br><br>
@@ -166,9 +165,6 @@ FUNCTIONS
 
 DATA
     __all__ = ['find_const', 'find_api', 'stackstrings', 'pe_import', 'con...
-
-FILE
-    /Users/oalieno/cryfind/crylib/__init__.py
 ```
 
 ## Constants
