@@ -4,7 +4,7 @@ from docopt import docopt
 from crylib import constants_to_rules
 from crylib.constants.CryptoConstants import constants
 
-__doc__ = f"""Usage: crygen [-e ENCODING]
+__doc__ = """Usage: crygen [-e ENCODING]
 
 -h --help           Show this screen
 -e ENCODING         Encoding, could be : fullword,qword,dword or all [default: all]

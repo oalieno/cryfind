@@ -5,7 +5,7 @@ from crylib import find_const, find_api, pe_import, stackstrings
 from crylib.constants.CryptoConstants import constants as cryptoConstants
 from crylib.constants.CryptoAPI import apis as cryptoAPIs
 
-__doc__ = f"""Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] [-y] <filename>
+__doc__ = """Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] [-y] <filename>
 
 -h --help           Show this screen
 -m METHODS          Methods to be used, could be : constant,api,peimport,stackstrings or all [default: constant,api]
