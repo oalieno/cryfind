@@ -1,5 +1,6 @@
 import yara
 
+
 def _api_to_rule(name, functions, _ctr=[0]):
     _ctr[0] += 1
 
@@ -25,6 +26,7 @@ def _apis_to_rules(apis):
     for api in apis:
         rules += _api_to_rule(api['name'], api['functions'])
     return rules
+
 
 def find_api(binary, apis):
     '''Find crypto api names in binary

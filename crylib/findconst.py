@@ -3,17 +3,20 @@ from collections import defaultdict
 import yara
 from .base import Group, Result, Match
 
+
 def _cut(x, n):
     if n == 0:
         return [x]
     ans = []
     for i in range(0, len(x), n):
-        ans.append(x[i:i+n])
+        ans.append(x[i:i + n])
     return ans
+
 
 def _negative(value, c_type_in, c_type_out):
     value = struct.unpack(c_type_in, value)[0]
     return struct.pack(c_type_out, -value)
+
 
 def _id_unique(values):
     _id, _values = [], []
@@ -23,18 +26,22 @@ def _id_unique(values):
             _values.append(value)
     return list(zip(_id, _values))
 
+
 def _xor(a, b):
     return bytes([x ^ y for x, y in zip(a, b)])
+
 
 def _xor_difference(data, size=1):
     ans = int.from_bytes(data[:-size], 'big') ^ int.from_bytes(data[size:], 'big')
     return ans.to_bytes(len(data) - size, 'big')
+
 
 def _is_repeat(data, size):
     for i, _ in enumerate(data):
         if data[i] != data[i % size]:
             return False
     return True
+
 
 def _values_to_rule_strings(values, size=0):
     rules = ''
@@ -52,10 +59,12 @@ def _values_to_rule_strings(values, size=0):
             rules += f'        $c_{size}_{i}_{_id} = {{ {encoding.hex()} }}\n'
     return rules
 
+
 def _search_yara(matches, binary, constants, size=['fullword']):
     rules = constants_to_rules(constants, size)
     for match in yara.compile(source=rules).match(data=binary):
         matches[match.meta['id']].add(match)
+
 
 def _search_yara_xor(matches, binary, constants, xor_size=1):
     if len(binary) < xor_size + 4:
@@ -77,16 +86,18 @@ def _search_yara_xor(matches, binary, constants, xor_size=1):
             ori = constants[_id]['value']
             if _value.encoding == 'little':
                 ori = ori[::-1]
-            key = _xor(binary[_value.address:_value.address+len(_value.value)], ori)
+            key = _xor(binary[_value.address:_value.address + len(_value.value)], ori)
             if _is_repeat(key, xor_size) and int.from_bytes(key, 'big') != 0:
                 _value.value = ori
                 _value.xor = key[:xor_size]
                 matches[_id].name = _match.name
                 matches[_id].values[0].append(_value)
 
+
 def _distance(values):
     distances = [value.address for value in values]
     return max(distances) - min(distances)
+
 
 def _auto_group(match):
     result = Result(match.name)
@@ -106,10 +117,10 @@ def _auto_group(match):
                 slots = [0] * (match.length // size)
                 head, tail, total = 0, -1, len(values)
                 while head < total:
-                    while tail < total - 1 and values[tail+1].address <= values[head].address + M:
+                    while tail < total - 1 and values[tail + 1].address <= values[head].address + M:
                         tail += 1
                         slots[values[tail].index] += 1
-                    if not 0 in slots:
+                    if 0 not in slots:
                         ans, H = (head, tail), M
                         break
                     slots[values[head].index] -= 1
@@ -133,6 +144,7 @@ def _auto_group(match):
 
     return result
 
+
 def _remove_duplicate(result):
     seen, new_groups = [], []
     for group in result.groups:
@@ -144,6 +156,7 @@ def _remove_duplicate(result):
             new_groups.append(group)
     result.groups = new_groups
 
+
 def _auto_groups(matches):
     results = []
     for match in matches.values():
@@ -152,6 +165,7 @@ def _auto_groups(matches):
             _remove_duplicate(result)
             results.append(result)
     return results
+
 
 def _constant_to_rule(constant, sizes=['fullword'], _ctr=[0]):
     _ctr[0] += 1
@@ -188,6 +202,7 @@ def _constant_to_rule(constant, sizes=['fullword'], _ctr=[0]):
 
     return rules
 
+
 def constants_to_rules(constants, sizes=['fullword']):
     '''Convert constants to yara rules
 
@@ -206,15 +221,15 @@ def constants_to_rules(constants, sizes=['fullword']):
     --------
     >>> constants_to_rules([{'name': 'test', 'value': b'abcd'}])
     rule cry_1 {
-	meta:
-	    id = 0
-	    name = "test"
-	    length = 4
-	strings:
-	    $c_0_0_0 = { 61626364 }
-	    $c_0_0_1 = { 64636261 }
-	condition:
-	    (any of ($c_0_0_*))
+        meta:
+            id = 0
+            name = "test"
+            length = 4
+        strings:
+            $c_0_0_0 = { 61626364 }
+            $c_0_0_1 = { 64636261 }
+        condition:
+            (any of ($c_0_0_*))
     }
     '''
     rules = ''
@@ -222,6 +237,7 @@ def constants_to_rules(constants, sizes=['fullword']):
         constant = {**constant, 'value': constant['value'][:64], 'id': i}
         rules += _constant_to_rule(constant, sizes)
     return rules
+
 
 def find_const(binary, constants, summary=False, xor_size_max=4):
     '''Find constants in binary
@@ -249,7 +265,7 @@ def find_const(binary, constants, summary=False, xor_size_max=4):
     '''
     matches = defaultdict(Match)
     _search_yara(matches, binary, constants, ['fullword', 'dword', 'qword'])
-    for xor_size in range(1, xor_size_max+1):
+    for xor_size in range(1, xor_size_max + 1):
         _search_yara_xor(matches, binary, constants, xor_size)
     if summary:
         results = [Result(match.name) for match in matches.values()]

@@ -1,11 +1,13 @@
 import json
 import r2pipe
 
+
 def thunked(blocks):
     for _, block in blocks.items():
         if block.get('jump') and blocks.get(block['jump']) is None:
             return True
     return False
+
 
 def parse(output):
     data = b''
@@ -13,9 +15,11 @@ def parse(output):
         data += int(line.split(' ')[1].strip(), 16).to_bytes(8, 'little')
     return data
 
+
 def stack_dump(r):
     output = r.cmd('pxQ 0x00178000 - rsp @ rsp')
     return parse(output)
+
 
 def _stackstrings(r, blocks, block, path, discovered):
     discovered.append(block)
@@ -52,6 +56,7 @@ def _stackstrings(r, blocks, block, path, discovered):
             pass
 
     return data
+
 
 def stackstrings(binary):
     '''Dump the stack from emulation

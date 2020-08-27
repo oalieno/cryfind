@@ -15,6 +15,7 @@ __doc__ = f"""Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] 
 -y --summary        Only show summary
 """
 
+
 def banner():
     print('''
    ▄▄· ▄▄▄   ▄· ▄▌·▄▄▄▪   ▐ ▄ ·▄▄▄▄
@@ -23,6 +24,7 @@ def banner():
   ▐███▌▐█•█▌ ▐█▀·.██▌.▐█▌██▐█▌██. ██
   ·▀▀▀ .▀  ▀  ▀ • ▀▀▀ ▀▀▀▀▀ █▪▀▀▀▀▀•
 ''')
+
 
 def main():
     arguments = docopt(__doc__)
@@ -92,6 +94,7 @@ def main():
                 print(e)
         else:
             print(f'[?] Unknown Method {method}')
+
 
 if __name__ == '__main__':
     try:

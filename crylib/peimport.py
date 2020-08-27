@@ -1,6 +1,7 @@
 import lief
 from .constants.CryptoAPI import apis
 
+
 def _enum_import(pe):
     for dll in pe.imports:
         dllname = dll.name.lower()
@@ -8,6 +9,7 @@ def _enum_import(pe):
             if not entry.is_ordinal:
                 function = entry.name
                 yield (dllname, function)
+
 
 def pe_import(binary):
     '''Find api names in PE import tables

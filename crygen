@@ -10,12 +10,14 @@ __doc__ = f"""Usage: crygen [-e ENCODING]
 -e ENCODING         Encoding, could be : fullword,qword,dword or all [default: all]
 """
 
+
 def main():
     arguments = docopt(__doc__)
     encoding = arguments['-e'].split(',')
     if arguments['-e'] == 'all':
         encoding = ['fullword', 'dword', 'qword']
     print(constants_to_rules(constants, encoding))
+
 
 if __name__ == '__main__':
     main()
