@@ -49,6 +49,17 @@ pip install git+https://github.com/oalieno/cryfind.git
 
 ![example](/example.png)
 
+### Encoding
+
+| abbreviation | full name |
+| --- | --- |
+| big | big endian |
+| little | little endian |
+| bnb | big endian -> negative -> big endian |
+| bnl | big endian -> negative -> little endian |
+| lnb | little endian -> negative -> big endian |
+| lnl | little endian -> negative -> little endian |
+
 ## Python API
 
 ```shell
