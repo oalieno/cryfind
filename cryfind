@@ -79,7 +79,7 @@ def main():
                 print(f'[+] DLL - {result["name"]}')
                 if not summary:
                     for function in result['functions']:
-                        print(f'    | {function["name"]}: 0x{function["address"]:x}')
+                        print(f'    | {function["name"]}: {", ".join([hex(address) for address in function["addresses"]])}')
             if not results:
                 print('[-] Nothing Found')
         elif method == 'peimport':

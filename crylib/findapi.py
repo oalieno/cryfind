@@ -1,3 +1,4 @@
+from collections import defaultdict
 import yara
 
 
@@ -46,13 +47,16 @@ def find_api(binary, apis):
     --------
     >>> results = find_api(b'......A_SHAFinal.....', [{'name': 'advapi32.dll', 'functions': ['A_SHAFinal', 'A_SHAInit']}])
     >>> print(results[0])
-    {'name': 'advapi32.dll', 'functions': [{'name': 'A_SHAFinal', 'address': 6}]}
+    {'name': 'advapi32.dll', 'functions': [{'name': 'A_SHAFinal', 'addresses': [6]}]}
     '''
     rules = _apis_to_rules(apis)
     results = []
     for match in yara.compile(source=rules).match(data=binary):
         result = {'name': match.meta['name'], 'functions': []}
+        functions = defaultdict(list)
         for address, _, value in match.strings:
-            result['functions'].append({'name': value.decode(), 'address': address})
+            functions[value.decode()].append(address)
+        for name, addresses in functions.items():
+            result['functions'].append({'name': name, 'addresses': addresses})
         results.append(result)
     return results
