@@ -39,6 +39,16 @@ Python >= 3
 python setup.py install
 ```
 
+or
+
+```
+pip install git+https://github.com/oalieno/cryfind.git
+```
+
+## Output Example
+
+![example](/example.png)
+
 ## Python API
 
 ```shell
