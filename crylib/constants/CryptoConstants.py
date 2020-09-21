@@ -759,3 +759,14 @@ constants += [
         'value': b'''65537'''
     }
 ]
+
+constants += [
+    {
+        'name': 'Salsa20 / ChaCha20',
+        'value': b'expand 16-byte k'
+    },
+    {
+        'name': 'Salsa20 / ChaCha20',
+        'value': b'expand 32-byte k'
+    }
+]
