@@ -239,7 +239,7 @@ def constants_to_rules(constants, sizes=['fullword']):
     return rules
 
 
-def find_const(binary, constants, summary=False, xor_size_max=4):
+def find_const(binary, constants, summary=False, xor_size_max=1):
     '''Find constants in binary
 
     Parameters
