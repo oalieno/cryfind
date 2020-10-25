@@ -22,6 +22,26 @@ Usage: cryfind [-m METHODS] [-s STRING] [-c CONSTANT] [-x LENGTH] [-y] <filename
 -y --summary        Only show summary
 ```
 
+```shell
+# default setting
+cryfind sample.exe
+
+# use all available methods
+cryfind -m all sample.exe
+
+# use only constant and peimport methods
+cryfind -m constant,peimport sample.exe
+
+# show only summary
+cryfind -y sample.exe
+
+# search for 'test' string and try xor key length from 1 to 8
+cryfind -x 8 -s 'test' sample.exe
+
+# search for 0xdeadbeef hex and try xor key length from 1 to 8
+cryfind -x 8 -c '0xdeadbeef' sample.exe
+```
+
 You can also compile all constants to yara rules using `crygen`.
 
 ```
