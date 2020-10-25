@@ -1,6 +1,8 @@
-import lief
 from .constants.CryptoAPI import apis
-
+try:
+    import lief
+except ImportError:
+    pass
 
 def _enum_import(pe):
     for dll in pe.imports:
@@ -29,10 +31,12 @@ def pe_import(binary):
     >>> print(results[0])
     {'dll': 'advapi32.dll', 'function': 'CryptAcquireContextA'}
     '''
+    if lief is None:
+        raise ImportError('Install lief to use pe_import function : pip install lief')
     try:
         pe = lief.PE.parse(raw=list(binary))
     except lief.bad_format:
-        raise Exception('[-] This is not PE binary')
+        raise ValueError('This is not PE binary')
 
     results = []
     for dllname, function in _enum_import(pe):

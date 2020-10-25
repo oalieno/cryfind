@@ -1,6 +1,8 @@
 import json
-import r2pipe
-
+try:
+    import r2pipe
+except ImportError:
+    pass
 
 def thunked(blocks):
     for _, block in blocks.items():
@@ -70,6 +72,8 @@ def stackstrings(binary):
     -------
     bytes
     '''
+    if r2pipe is None:
+        raise ImportError("Install r2pipe to use stackstrings function : pip install r2pipe")
     tmpfile = '/tmp/cryfind-tmp'
     with open(tmpfile, 'wb') as f:
         f.write(binary)

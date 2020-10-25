@@ -66,12 +66,15 @@ def main():
                 print('[-] Nothing Found')
         elif method == 'stackstrings':
             print('\n[+] Searching For Crypto Constants in StackStrings... ( This might takes a while )')
-            data = stackstrings(binary)
-            results = find_const(data, constants, summary)
-            for result in results:
-                print(result)
-            if not results:
-                print('[-] Nothing Found')
+            try:
+                data = stackstrings(binary)
+                results = find_const(data, constants, summary)
+                for result in results:
+                    print(result)
+                if not results:
+                    print('[-] Nothing Found')
+            except ImportError as e:
+                print(f'[-] {e}')
         elif method == 'api':
             print('\n[+] Searching For Crypto API Names...')
             results = find_api(binary, apis)
@@ -90,8 +93,8 @@ def main():
                     print(f'[+] {result["dll"]}: {result["function"]}')
                 if not results:
                     print('[-] Nothing Found')
-            except Exception as e:
-                print(e)
+            except (ImportError,ValueError) as e:
+                print(f'[-] {e}')
         else:
             print(f'[?] Unknown Method {method}')
 
