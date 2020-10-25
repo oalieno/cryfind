@@ -17,7 +17,7 @@ def test_xor():
 
 
 def test_xor_2():
-    results = find_const(b'adfeiv\t\x0b\x0b\rY[[]]__Qwreoij', [{'name': 'abcd', 'value': b'abcd12345678'}])
+    results = find_const(b'adfeiv\t\x0b\x0b\rY[[]]__Qwreoij', [{'name': 'abcd', 'value': b'abcd12345678'}], xor_size_max=2)
     assert(len(results) == 1)
 
 
