@@ -42,6 +42,8 @@ def main():
             'value': arguments['-s'].encode()
         }]
     elif arguments['-c']:
+        if arguments['-c'].startswith('0x'):
+            arguments['-c'] = arguments['-c'][2:]
         constants = [{
             'name': 'Custom',
             'value': bytes.fromhex(arguments['-c'])
