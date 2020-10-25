@@ -95,7 +95,7 @@ def main():
                     print(f'[+] {result["dll"]}: {result["function"]}')
                 if not results:
                     print('[-] Nothing Found')
-            except (ImportError,ValueError) as e:
+            except (ImportError, ValueError) as e:
                 print(f'[-] {e}')
         else:
             print(f'[?] Unknown Method {method}')

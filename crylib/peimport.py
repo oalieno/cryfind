@@ -4,6 +4,7 @@ try:
 except ImportError:
     pass
 
+
 def _enum_import(pe):
     for dll in pe.imports:
         dllname = dll.name.lower()

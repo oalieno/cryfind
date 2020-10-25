@@ -4,6 +4,7 @@ try:
 except ImportError:
     pass
 
+
 def thunked(blocks):
     for _, block in blocks.items():
         if block.get('jump') and blocks.get(block['jump']) is None:
