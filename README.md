@@ -150,7 +150,7 @@ FUNCTIONS
         >>> print(results[0])
         {'name': 'advapi32.dll', 'functions': [{'name': 'A_SHAFinal', 'addresses': [6]}]}
     
-    find_const(binary, constants, summary=False, xor_size_max=4)
+    find_const(binary, constants, summary=False, xor_size_max=1)
         Find constants in binary
         
         Parameters
