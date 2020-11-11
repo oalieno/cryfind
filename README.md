@@ -5,7 +5,7 @@
     <a><img alt="undefined" src="https://img.shields.io/badge/license-MIT-brightgreen?style=for-the-badge"></a>
     <a><img alt="undefined" src="https://img.shields.io/badge/-python-9cf?style=for-the-badge&logo=python"></a>
     <a href="https://github.com/oalieno/cryfind/actions"><img alt="undefined" src="https://img.shields.io/badge/ci-pass-brightgreen?style=for-the-badge"></a>
-    <a href="https://lgtm.com/projects/g/oalieno/cryfind/"><img alt="undefined" src="https://img.shields.io/badge/lgtm-1-yellow?style=for-the-badge"></a>
+    <a href="https://lgtm.com/projects/g/oalieno/cryfind/alerts/"><img alt="Total alerts" src="https://img.shields.io/lgtm/alerts/g/oalieno/cryfind.svg?logo=lgtm&logoWidth=18&style=for-the-badge"/></a>
     <br><br><br>
 </div>
 
