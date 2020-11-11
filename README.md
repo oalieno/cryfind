@@ -1,10 +1,10 @@
 <div id="mybrand" align="center">
     <img src="https://i.imgur.com/s50m6R0.png" height="200">
     <br><br>
-    <a><img alt="undefined" src="https://img.shields.io/badge/release-v3.0.1-yellow?style=for-the-badge"></a>
-    <a><img alt="undefined" src="https://img.shields.io/badge/license-MIT-brightgreen?style=for-the-badge"></a>
-    <a><img alt="undefined" src="https://img.shields.io/badge/-python-9cf?style=for-the-badge&logo=python"></a>
-    <a href="https://github.com/oalieno/cryfind/actions"><img alt="undefined" src="https://img.shields.io/badge/ci-pass-brightgreen?style=for-the-badge"></a>
+    <a><img alt="release 3.0.1" src="https://img.shields.io/badge/release-v3.0.1-yellow?style=for-the-badge"></a>
+    <a><img alt="mit" src="https://img.shields.io/badge/license-MIT-brightgreen?style=for-the-badge"></a>
+    <a><img alt="python" src="https://img.shields.io/badge/-python-9cf?style=for-the-badge&logo=python"></a>
+    <a href="https://github.com/oalieno/cryfind/actions?query=workflow%3A%22Python+application%22"><img alt="Github workflow" src="https://img.shields.io/github/workflow/status/oalieno/cryfind/Python%20application?style=for-the-badge">
     <a href="https://lgtm.com/projects/g/oalieno/cryfind/alerts/"><img alt="Total alerts" src="https://img.shields.io/lgtm/alerts/g/oalieno/cryfind.svg?logo=lgtm&logoWidth=18&style=for-the-badge"/></a>
     <br><br><br>
 </div>
