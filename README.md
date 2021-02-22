@@ -12,6 +12,9 @@
 
 Cryfind is a tool to help you find crypto signatures in binary.
 
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foalieno%2Fcryfind.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Foalieno%2Fcryfind?ref=badge_large)
+
 ## Usage
 
 ```
@@ -71,6 +74,7 @@ pip install git+https://github.com/oalieno/cryfind.git
 ## Output Example
 
 ![example](/example.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foalieno%2Fcryfind.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foalieno%2Fcryfind?ref=badge_shield)
 
 ### Encoding
 
