@@ -768,5 +768,37 @@ constants += [
     {
         'name': 'Salsa20 / ChaCha20',
         'value': b'expand 32-byte k'
+    },
+    {
+        'name': 'Murmurhash3',
+        'value': bytes.fromhex('85ebca6b')
+    },
+    {
+        'name': 'Murmurhash3',
+        'value': bytes.fromhex('c2b2ae35')
+    },
+    {
+        'name': 'Murmurhash3',
+        'value': bytes.fromhex('cc9e2d51')
+    },
+    {
+        'name': 'Murmurhash3',
+        'value': bytes.fromhex('1b873593')
+    },
+    {
+        'name': 'Murmurhash3 [128 bits]',
+        'value': bytes.fromhex('ff51afd7ed558ccd')
+    },
+    {
+        'name': 'Murmurhash3 [128 bits]',
+        'value': bytes.fromhex('c4ceb9fe1a85ec53')
+    },
+    {
+        'name': 'Murmurhash3 [128 bits]',
+        'value': bytes.fromhex('87c37b91114253d5')
+    },
+    {
+        'name': 'Murmurhash3 [128 bits]',
+        'value': bytes.fromhex('4cf5ad432745937f')
     }
 ]
