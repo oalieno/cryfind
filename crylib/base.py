@@ -31,6 +31,15 @@ class Value:
         output += f': 0x{self.address:x}'
         return output
 
+    def json(self):
+        return {
+            "value": self.value.hex(),
+            "address": self.address,
+            "index": self.index,
+            "encoding": self.encoding,
+            "xor": self.xor.hex()
+        }
+
 
 class Group:
     def __init__(self, blocksize, values):
@@ -42,6 +51,12 @@ class Group:
         for value in self.values:
             output += f'    | {value}\n'
         return output.strip('\n')
+
+    def json(self):
+        return {
+            "blocksize": self.blocksize,
+            "values": [value.json() for value in self.values]
+        }
 
 
 class Result:
@@ -55,6 +70,12 @@ class Result:
         for group in self.groups:
             output += '    ' + str(group).replace('\n', '\n    ') + '\n'
         return output.strip('\n')
+
+    def json(self):
+        return {
+            "name": self.name,
+            "groups": [group.json() for group in self.groups]
+        }
 
 
 class Match:
